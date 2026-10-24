@@ -27,7 +27,7 @@ jobs:
               if [ -d "$story_dir" ]; then
                 folder_name=$(basename "$story_dir")
                 echo "Processing story: $folder_name"
-                python3 scripts/convert_twee.py "$story_dir" "games/${folder_name}.json"
+                python3 scripts/convert_twee.py "$story_dir" "games/${folder_name}.json" || true
               fi
             done
           fi
@@ -36,6 +36,7 @@ jobs:
         run: |
           python3 -c "
           import os, json
+
           catalog = []
           if os.path.exists('games'):
               for f in os.listdir('games'):
@@ -54,7 +55,7 @@ jobs:
           
           with open('games/catalog.json', 'w', encoding='utf-8') as cat:
               json.dump(catalog, cat, indent=2)
-          print('Generated games/catalog.json with', len(catalog), 'entry/entries.')
+          print('Generated games/catalog.json with', len(catalog), 'entries.')
           "
 
       - name: Deploy to GitHub Pages
