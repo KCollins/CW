@@ -1,0 +1,36 @@
+name: Build and Deploy CW Adventure
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Generate Games Catalog JSON
+        run: |
+          python3 -c "
+          import os, json
+          games = []
+          for f in os.listdir('games'):
+              if f.endswith('.json') and f != 'catalog.json':
+                  with open(os.path.join('games', f)) as gf:
+                      data = json.load(gf)
+                      games.append({'id': f, 'title': data.get('title', f), 'author': data.get('author', 'Unknown')})
+          with open('games/catalog.json', 'w') as cat:
+              json.dump(games, cat, indent=2)
+          print('Generated catalog with', len(games), 'games.')
+          "
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
