@@ -1,0 +1,659 @@
+:: Corridor [room]
+
+<<switch random(1, 3)>>
+ <<case 1>>You are in a corridor that twists and turns, lined with fake doors and stairs that lead nowhere. But only statues in their niches are watching.
+ <<case 2>>You are in a passage with low ceiling that presses down on you, dimming the light and amplifying echoes. But it's only your steps ringing.
+ <<case 3>>You are in a hall of wood and brick, crooked columns strewn about at random, as if to better hide creatures of the dark. But nothing stirs.
+<</switch>>
+
+* [[Drink a potion]]
+* [[Proceed cautiously]]
+* [[Just move on already]]
+
+:: Drink a potion
+
+You rummage through your bag for something that can give you a boost.
+
+<<include "Choose potion">>
+
+<<if $potion_count > 0>>
+@@text-align:center;
+ [[Drink -> Drink a potion!]] / [[Think again -> Corridor]]
+@@
+<<else>>
+Unfortunately, you come up empty-handed.
+
+@@text-align:center;
+ [[Try something else -> Corridor]]
+@@
+<</if>>
+
+:: Drink a potion!
+
+<<set $player.inventory.potions[$chosen_potion] -= 1>>You uncork the potion of $chosen_potion and gulp it down. Within moments, its power spreads through your body, burning.
+
+<<if buff_attribute($player, $chosen_potion) > 3>>
+ <<set $player.wounds += random(1, 4, +1)>>In fact, so soon after the last one it burns badly. Power comes at a cost.
+<</if>>
+
+@@text-align:center;
+<<if $player.wounds >= $player.stamina * $player.size>>
+ [[You are badly hurt]]
+<<else>>
+ [[Go on now -> Corridor]]
+<</if>>
+@@
+
+:: Proceed cautiously
+
+Best not to dwell for too long in a place like this. Still better than rushing headlong into whatever dangers may lie ahead. You advance step by step, watching your surroundings.<<set $player.energy -= 7>>
+
+@@text-align:center;
+<<if $story_progress >= 100>>
+ <<link [[Moments later... -> Portal]]>><<set $story_progress -= 100>><</link>>
+<<elseif $player.energy > 0>>
+ <<switch random(1, 3)>>
+  <<case 1>>[[Moments later... -> Challenge!]]
+  <<case 2>>[[Moments later... -> Sideroom]]
+  <<case 3>><<link [[Moments later... -> Corridor]]>><<set $story_progress += roll_dice(1, 4, +1)>><</link>>
+ <</switch>>
+<<else>>
+ <<link [[Moments later... -> Encounter!]]>><<run refresh_energy($player)>><</link>>
+<</if>>
+@@
+
+:: Just move on already
+
+Best not to dwell for too long in a place like this. Who knows what might lurk in shadowy corners. You stride forth, towards your destination. Better the danger that lies ahead of you.<<set $player.energy -= 5>>
+
+@@text-align:center;
+<<if $story_progress >= 100>>
+ <<link [[Moments later... -> Portal]]>><<set $story_progress -= 100>><</link>>
+<<elseif $player.energy > 0>>
+ <<switch random(1, 3)>>
+  <<case 1>><<link [[Moments later... -> Corridor]]>><<set $story_progress += roll_dice(1, 4, +1)>><</link>>
+  <<default>>[[Moments later... -> Challenge!]]
+ <</switch>>
+<<else>>
+ <<link [[Moments later... -> Encounter!]]>><<run refresh_energy($player)>><</link>>
+<</if>>
+@@
+
+:: Sideroom [room]
+
+A discreet doorway in the shadows leads to a room that hasn't seen use in a while. The walls are bare; the floor, cold. An empty coffer is rotting away opposite from a rusty candle holder.
+
+<<switch random(1, 3)>>
+ <<case 1>>A throrough search fails to turn up anything useful.
+
+@@text-align:center;
+[[Continue on your way -> Corridor]]
+@@
+ <<default>>On closer inspection, there is a secret passage in the far corner, going off who knows where.
+
+@@text-align:center;
+[[Brave the passage -> Secret passage]]
+[[Leave it alone -> Corridor]]
+@@
+<</switch>>
+
+:: Secret passage
+
+<<switch random(1, 3)>>
+ <<case 1>>The secret passage meanders all over the place, turning and twisting. Somehow, you get the feeling it leads closer to your destination.
+
+@@text-align:center;
+ <<set $story_progress += roll_dice(1, 6, +4)>>[[Move on -> Corridor]]
+@@
+ <<case 2>>The secret passage meanders all over the place, turning and twisting. You get the impression it leads to a whole other part of the keep.
+
+@@text-align:center;
+ [[Move on -> Search the place]]
+@@
+ <<case 3>>The secret passage meanders all over the place, turning and twisting. It's enough to make one paranoid about running into something bad.
+
+@@text-align:center;
+ [[In fact... -> Encounter!]]
+@@
+<</switch>>
+
+:: Challenge!
+
+<<switch random(1, 6)>>
+ <<case 1>><<include "Portcullis">>
+ <<case 2>><<include "Icicle patch">>
+ <<case 3>><<include "Mud bath">>
+ <<case 4>><<include "Poison cloud">>
+ <<case 5>><<include "Trapped passage">>
+ <<case 6>><<include "Dead end">>
+<</switch>>
+
+:: Portcullis [room]
+
+Here the way forward narrows into a small doorway, itself barred by a portcullis of wood and iron. There's no obvious way to open it on either side. Brawn alone can prevail here... or is there some other, hidden way?
+
+(Roll muscle against a target of 50 to pass unhurt, or take 1d4+1 damage.)
+
+* [[Lift the portcullis]]
+* [[Magic your way through -> Hex portcullis?]]
+* [[No way, go back]]
+
+:: Lift the portcullis
+
+You brace yourself and strain against the bars. The gate begins to lift...
+
+<<set _you_roll to roll_challenge($player, "muscle")>>(You roll _you_roll against the target of 50.)
+
+<<if _you_roll >= 50>>
+ <<set $story_progress += roll_dice(2, 6, +3)>>All of a sudden there's enough room for you to pass underneath. It crashes back down with a resounding clang, but by then you're clear through.
+<<else>>
+ <<set $player.wounds += roll_dice(1, 4, +1)>><<set $player.blessings += 1>><<set $player.experience += 250>>Sharp pains courses through your limbs, and you drop it with a resounding clang. No way you can try again right now. You'll know what to do next time. For now...
+<</if>>
+
+<<include "Challenge completed">>
+
+:: Hex portcullis?
+
+With the see-through gate in front of you, taunting, you wonder what sort of spell might be able to get you past it.
+
+<<include "Choose spell">>
+
+<<if $spell_count > 0>>
+@@text-align:center;
+ [[Cast spell -> Hex portcullis!]] / [[Think again -> Portcullis]]
+@@
+<<else>>
+Unfortunately, you draw a blank.
+
+@@text-align:center;
+ [[Try something else -> Portcullis]]
+@@
+<</if>>
+
+:: Hex portcullis!
+
+<<set $player.spellbook[$chosen_spell].charges -= 1>>\
+
+<<switch $chosen_spell>>
+ <<case "Undergrowth">>Strong vines sprout from the ground, pushing aside stones, grasping at the bars... and lifting them off the ground. All of a sudden there's enough room for you to pass underneath. You go ahead while the spell holds.<<set $story_progress += roll_dice(2, 6, +3)>><<set $player.experience += 50>>
+
+@@text-align:center;
+ [[Move on -> Respite]]
+@@
+ <<case "Flamestrike">>A tall flame bursts from the ground in front of you, then surges forward as if carried by a strong wind. It passes straight through the gate, leaving scattered licks of flame on the bars, but the hard wood fails to ignite.
+
+@@text-align:center;
+ [[Think again -> Portcullis]]
+@@
+ <<default>>You unleash your magic, but it doesn't seem to make much of a difference. It will take more than that to pass.
+
+@@text-align:center;
+ [[Think again -> Portcullis]]
+@@
+<</switch>>
+
+:: Icicle patch [room]
+
+The air is colder here all of a sudden. There's snow on the floor, and frost on the walls. Countless icicles dangle from the ceiling, clinking with every step you take. To dodge the falling daggers as you run will be a challenge.
+
+(Roll agility against a target of 40 to pass unhurt, or take 1d6+4 damage.)
+
+* [[Brave the icicles]]
+* [[Magic your way through -> Hex icicles?]]
+* [[No way, go back]]
+
+:: Brave the icicles
+
+You take a deep breath and dart forward, weaving a path among the translucent daggers. It feels like a long way to the end of the gauntlet, but then...
+
+<<set _you_roll to roll_challenge($player, "agility")>>(You roll _you_roll against the target of 40.)
+
+<<if _you_roll >= 40>>
+ <<set $story_progress += roll_dice(2, 6, +3)>>You made it through, and unscathed at that. A moment's rest, then onward to your goal!
+<<else>>
+ <<set $player.wounds += roll_dice(1, 6, +4)>><<set $player.blessings += 1>><<set $player.experience += 250>>As you take hit after hit, relief suddenly seems too far away. You turn around, bleeding and battered. You'll know what to do next time. For now...
+<</if>>
+
+<<include "Challenge completed">>
+
+:: Hex icicles?
+
+With the daggers of ice in front of you, taunting, you wonder what sort of spell might be able to get you past them.
+
+<<include "Choose spell">>
+
+<<if $spell_count > 0>>
+@@text-align:center;
+ [[Cast spell -> Hex icicles!]] / [[Think again -> Icicle patch]]
+@@
+<<else>>
+Unfortunately, you draw a blank.
+
+@@text-align:center;
+ [[Try something else -> Icicle patch]]
+@@
+<</if>>
+
+:: Hex icicles!
+
+<<set $player.spellbook[$chosen_spell].charges -= 1>>\
+
+<<switch $chosen_spell>>
+ <<case "Flamestrike">>A tall flame bursts from the ground in front of you, then surges forward as if carried by a strong wind. The rising heat causes most icicles to shake loose, littering the ground. They crinkle under your feet as you walk past.<<set $story_progress += roll_dice(2, 6, +3)>><<set $player.experience += 50>>
+
+<<include "Challenge completed">>
+ <<case "Windstorm">>At first nothing seems to happen, then a strong wind picks up, and soon grows into a howling gale. Many icicles are shaken loose; enough remain to bruise you on the way through.<<set $story_progress += roll_dice(2, 6, +3)>><<set $player.wounds += roll_dice(1, 4, +1)>><<set $player.experience += 100>>
+
+<<include "Challenge completed">>
+ <<case "Levitation">>As the spell takes hold, you lift into the air and float away. The air current from your passage still knocks down enough icicles to bruise you.<<set $story_progress += roll_dice(2, 6, +3)>><<set $player.wounds += roll_dice(1, 4, +1)>><<set $player.experience += 100>>
+
+<<include "Challenge completed">>
+ <<default>>You unleash your magic, but it doesn't seem to make much of a difference. It will take more than that to pass.
+
+@@text-align:center;
+ [[Think again -> Icicle patch]]
+@@
+<</switch>>
+
+:: Mud bath [room]
+
+Here the corridor widens into a sort of pool, only it's filled with a stinky mud colored green-brown. Probing with a convenient stick reveals it's about waist-deep, at least near the edge. It will take resilience to cross over.
+
+(Roll stamina against a target of 50 to pass unhurt, or take 1d4+1 damage.)
+
+* [[Brave the mud bath]]
+* [[Magic your way through -> Hex mud bath?]]
+* [[No way, go back]]
+
+:: Brave the mud bath
+
+You wade into the pool. Strangely enough, the mud does't seem to stick... much.
+
+<<set _you_roll to roll_challenge($player, "stamina")>>(You roll _you_roll against the target of 50.)
+
+<<if _you_roll >= 50>>
+ <<set $story_progress += roll_dice(2, 6, +3)>>It feels like a never-ending slog, but at long last the other side is right in front of you. It brings the goal that much closer. Well, after some rest.
+<<else>>
+ <<set $player.wounds += roll_dice(1, 4, +1)>><<set $player.blessings += 1>><<set $player.experience += 250>>You're not close to the halfway point, and every muscle aches. Better to return before collapsing in //that//. You'll know what to do next time. For now...
+<</if>>
+
+<<include "Challenge completed">>
+
+:: Hex mud bath?
+
+With the wide-open space in front of you, taunting, you wonder what sort of spell might be able to get you past it.
+
+<<include "Choose spell">>
+
+<<if $spell_count > 0>>
+@@text-align:center;
+ [[Cast spell -> Hex mud bath!]] / [[Think again -> Mud bath]]
+@@
+<<else>>
+Unfortunately, you draw a blank.
+
+@@text-align:center;
+ [[Try something else -> Mud bath]]
+@@
+<</if>>
+
+:: Hex mud bath!
+
+<<set $player.spellbook[$chosen_spell].charges -= 1>>\
+
+<<switch $chosen_spell>>
+ <<case "Levitation">>As the spell takes hold, you lift into the air and float away over the stinky morass. The fumes rising from it are hard to endure, but you make it.<<set $story_progress += roll_dice(2, 6, +3)>><<set $player.experience += 50>>
+
+<<include "Challenge completed">>
+ <<case "Snowdrift">>As a cold wind picks up all around you, blowing snow over the pool, the mud covers with a thin sheet of ice. It holds your weight for over half the distance, but then you fall in and have to wade the rest of the way. It hurts.<<set $story_progress += roll_dice(2, 6, +3)>><<set $player.wounds += roll_dice(1, 4, +1)>><<set $player.experience += 100>>
+
+<<include "Challenge completed">>
+ <<case "Undergrowth">>At first nothing seems to happen, but in the end a few timid vines poke their tips above the mud. They're nowhere near enough to support your weight.
+
+@@text-align:center;
+ [[Think again -> Mud bath]]
+@@
+ <<default>>You unleash your magic, but it doesn't seem to make much of a difference. It will take more than that to pass.
+
+@@text-align:center;
+ [[Think again -> Mud bath]]
+@@
+<</switch>>
+
+:: Poison cloud [room]
+
+From wall to wall and from floor to ceiling, the corridor ahead of you is filled with fumes colored a sickly yellow. Best not to breathe it, whatever it is. But can you get to the other side quickly enough?
+
+(Roll speed against a target of 40 to pass unhurt, or take 1d6+4 damage.)
+
+* [[Brave the poison cloud]]
+* [[Magic your way through -> Hex poison cloud?]]
+* [[No way, go back]]
+
+:: Brave the poison cloud
+
+You hold your breath and start running. Soon yellow clouds are all you can see.
+
+<<set _you_roll to roll_challenge($player, "speed")>>(You roll _you_roll against the target of 40.)
+
+<<if _you_roll >= 40>>
+ <<set $story_progress += roll_dice(2, 6, +3)>>It feels like a never-ending nightmare, but at long last you hit clean air. It brings the goal that much closer. Well, after your lungs stop burning.
+<<else>>
+ <<set $player.wounds += roll_dice(1, 6, +4)>><<set $player.blessings += 1>><<set $player.experience += 250>>You're not close to the halfway point, and your lungs are burning. Better to return before collapsing in //that//. You'll know what to do next time. For now...
+<</if>>
+
+<<include "Challenge completed">>
+
+:: Hex poison cloud?
+
+With the swirling clouds in front of you, taunting, you wonder what sort of spell might be able to get you past them.
+
+<<include "Choose spell">>
+
+<<if $spell_count > 0>>
+@@text-align:center;
+ [[Cast spell -> Hex poison cloud!]] / [[Think again -> Poison cloud]]
+@@
+<<else>>
+Unfortunately, you draw a blank.
+
+@@text-align:center;
+ [[Try something else -> Poison cloud]]
+@@
+<</if>>
+
+:: Hex poison cloud!
+
+<<set $player.spellbook[$chosen_spell].charges -= 1>>\
+
+<<switch $chosen_spell>>
+ <<case "Windstorm">>At first nothing seems to happen, then a strong wind picks up, and soon grows into a howling gale. Soon not a trace remains of the yellow clouds.<<set $story_progress += roll_dice(2, 6, +3)>><<set $player.experience += 50>>
+
+<<include "Challenge completed">>
+ <<case "Flamestrike">>A tall flame bursts from the ground in front of you, then surges forward as if carried by a strong wind. Unfortunately the yellow clouds fail to burn.
+
+@@text-align:center;
+ [[Think again -> Poison cloud]]
+@@
+ <<default>>You unleash your magic, but it doesn't seem to make much of a difference. It will take more than that to pass.
+
+@@text-align:center;
+ [[Think again -> Poison cloud]]
+@@
+<</switch>>
+
+:: Trapped passage [room]
+
+The floor going forward is made of multicolored tiles that form an elusive pattern. Many of them seem loose. At either hand, little holes line the walls, countless darts waiting to spring if you take a single wrong step. This one will take keep eyes and concentration to get through.
+
+(Roll focus against a target of 40 to pass unhurt, or take 1d6+4 damage.)
+
+* [[Brave the trapped passage]]
+* [[Magic your way through -> Hex traps?]]
+* [[No way, go back]]
+
+:: Brave the trapped passage
+
+You take a deep breath and dart forward, weaving a path between the trapped floor tiles. It feels like a long way to the end of the gauntlet, but then...
+
+<<set _you_roll to roll_challenge($player, "focus")>>(You roll _you_roll against the target of 40.)
+
+<<if _you_roll >= 40>>
+ <<set $story_progress += roll_dice(2, 6, +3)>>You made it through, and unscathed at that. A moment's rest, then onward to your goal!
+<<else>>
+ <<set $player.wounds += roll_dice(1, 6, +4)>><<set $player.blessings += 1>><<set $player.experience += 250>>It's a step and a miss. You dodge a dart or two, but others find their mark. Turning around before their sting kills, you'll know what to do next time. For now...
+<</if>>
+
+<<include "Challenge completed">>
+
+:: Hex traps?
+
+With the mechanical gauntlet in front of you, taunting, you wonder what sort of spell might be able to get you past it.
+
+<<include "Choose spell">>
+
+<<if $spell_count > 0>>
+@@text-align:center;
+ [[Cast spell -> Hex traps!]] / [[Think again -> Trapped passage]]
+@@
+<<else>>
+Unfortunately, you draw a blank.
+
+@@text-align:center;
+ [[Try something else -> Trapped passage]]
+@@
+<</if>>
+
+:: Hex traps!
+
+<<switch $chosen_spell>>
+ <<case "Levitation">>As the spell takes hold, you lift into the air and float away over the killer floor. It seems to go on for a long time, but now it carries no danger.<<set $story_progress += roll_dice(2, 6, +3)>><<set $player.experience += 50>>
+
+<<include "Challenge completed">>
+ <<case "Snowdrift">>As a cold wind picks up all around you, blowing snow over the pool, you can hear the deadly mechanisms seizing up. Only a few keep working, as you discover painfully on your way through.<<set $story_progress += roll_dice(2, 6, +3)>><<set $player.wounds += roll_dice(1, 4, +1)>><<set $player.experience += 100>>
+
+<<include "Challenge completed">>
+ <<case "Undergrowth">>Strong vines sprout from the ground and grow rapidly, pushing aside floor tiles left and right. A few traps are sprung, others jammed, but most remain functional. This is not the way.
+
+@@text-align:center;
+ [[Think again -> Trapped passage]]
+@@
+ <<default>>You unleash your magic, but it doesn't seem to make much of a difference. It will take more than that to pass.
+
+@@text-align:center;
+ [[Think again -> Trapped passage]]
+@@
+<</switch>>
+
+:: Dead end [room]
+
+The corridor ends abruptly in a blank wall. It lacks even the carvings that decorate other areas. Otherwise there's no sign of new construction work.
+
+<<switch random(1, 3)>>
+ <<case 1>>A throrough search fails to turn up anything useful.
+
+@@text-align:center;
+[[Head back -> Corridor]]
+@@
+ <<default>>On closer inspection, there is a secret passage right in the middle, going off who knows where.
+
+@@text-align:center;
+[[Brave the passage -> Secret passage]]
+[[Leave it alone -> Corridor]]
+@@
+<</switch>>
+
+:: No way, go back
+
+<<nobr>>
+<<set $story_progress -= roll_dice(2, 6, +3)>>
+That looks much too dangerous. Best to retrace your steps, even at the cost of losing progress. There must be some other way forward. A safer one.
+<</nobr>>
+
+@@text-align:center;
+<<if $story_progress > 0>>
+ [[Retreat, for now->Corridor]]
+<<else>>
+ [[Retreat, for now->A doorway too far]]
+<</if>>
+@@
+
+:: Search the place
+
+<<switch random(1, 2)>>
+ <<case 1>><<include "Monster lair">>
+ <<case 2>><<include "Kitchen">>
+<</switch>>
+
+:: Monster lair [room]
+
+A previous adventurer's equipment is scattered all over the place, but there's no trace of its owner apart from a blood trail leading off somewhere.
+
+<<switch random(1, 3)>>
+ <<case 1>>On closer inspection, the blood trail leads straight to a solid wall, and stops there.
+ <<case 2>>On closer inspection, the blood trail leads back in the direction where you came from.
+ <<case 3>>On closer inspection, the blood trail leads to the edge of a bottomless pit.
+<</switch>>
+
+* [[Rummage through the clutter]]
+* [[Just move on -> Corridor]]
+
+:: Rummage through the clutter
+
+This feels wrong, but then again the previous owner doesn't need their stuff anymore by the looks of it, while in your hands it could help save the land.
+
+<<switch random(1, 6)>>
+ <<case 1>>Unfortunately, none of it seems to be usable anymore. You leave empty-handed.
+ <<case 2 3>>With a little patience, you manage to find a potion of <<= give_random_potion($player)>>. Should come in handy.
+ <<case 4 5>>With a little patience, you manage to find a scroll of <<= give_random_spell($player)>>. Should come in handy.
+ <<case 6>>With a little patience, you manage to find a potion of <<= give_random_potion($player)>> and a scroll of <<= give_random_spell($player)>>. Both should come in handy.
+<</switch>>
+
+@@text-align:center;
+[[Go on now -> Corridor]]
+@@
+
+:: Kitchen [room]
+
+Pots and pans hang on the brick wall above a stove made to cook for many. Shelves line the other walls, and a long table takes up the middle of the room. The table is rough, wobbly and stained, but otherwise looks clean.
+
+* [[Raid the pantry]]
+* [[Just move on -> Corridor]]
+
+:: Raid the pantry
+
+Well, the place looks deserted. Nobody's going to miss a loaf of bread, right?
+
+<<switch random(1, 3)>>
+ <<case 1>>Whoa! What was that? You didn't have time to see it well in the shadows, but it looked ready to make a meal out of you instead. Better leave it alone.
+ <<default>>Most of the food is spoiled by now, if your nose is any indication, but you still scrounge up enough for a meal. It's better than nothing.<<set $player.inventory.rations += 1>>
+<</switch>>
+
+@@text-align:center;
+[[Go on now -> Corridor]]
+@@
+
+:: Respite
+
+<<switch random(1, 2)>>
+ <<case 1>><<include "Drinking fountain">>
+ <<case 2>><<include "Waiting room">>
+<</switch>>
+
+:: Drinking fountain [room]
+
+Halfway up the richly carved wall, water trickles out of a spigot, filling its basin with agonizing slowness. It's only large enough for two fistfuls of liquid, the excess leaving through an overflow drain.
+
+* [[Drink the water]]
+* [[Wash your wounds]]
+* [[Leave it alone]]
+
+:: Drink the water
+
+<<nobr>>
+<<set $player.wounds += roll_dice(1, 4, +1)>>
+<<for _spell range $player.spellbook>>
+ <<if _spell.charges <= 0>>
+  <<set _spell.charges = 1>>
+ <</if>>
+<</for>>
+The water is so cold it hurts. It hurts badly. Was it poisoned? On the other hand you suddenly remember with clarity all your spells. That will come in handy. But for now...
+<</nobr>>
+
+@@text-align:center;
+<<if $player.wounds >= $player.stamina * $player.size>>
+ [[You are badly hurt]]
+<<else>>
+ [[Move on -> Corridor]]
+<</if>>
+@@
+
+:: Wash your wounds
+
+<<if $player.wounds > 0>>
+ <<run heal_wounds($player, roll_dice(1, 4, +1))>>As the clear water passes over bruises and cuts, they appear to get smaller under your eyes. You feel better.
+<<else>>
+ <<set $player.blessings += 1>>As the clear water passes over unblemished skin, you feel your arms lighter. Quicker. Sharp. Truly a blessing.
+<</if>>
+
+<<set $player.energy -= 5>>On the other hand, it feels as if the place is darker all of a sudden, and sounds get muffled. Monsters could be just behind the corner.
+
+@@text-align:center;
+<<if $player.energy > 0>>
+ [[Move on -> Corridor]]
+<<else>>
+ <<link [[In fact... -> Encounter!]]>><<run refresh_energy($player)>><</link>>
+<</if>>
+@@
+
+:: Leave it alone
+
+Who knows what kind of water flows through a place like this. Best not to touch it. You march on towards your goal instead.
+
+@@text-align:center;
+ [[Move on -> Corridor]]
+@@
+
+:: Waiting room [room]
+
+A recessed portion of the corridor shelters a stone bench and two small braziers. Iron hooks overhead might have held a curtain or tapestry once. Now only abstract carvings cover the wall.
+
+* [[Eat and rest]]
+* [[Refresh your spells]]
+* [[Just press onward]]
+
+:: Eat and rest
+
+<<if $player.inventory.rations > 0>>
+ <<set $player.inventory.rations -= 1>><<run heal_wounds($player, roll_dice(1, 6, +4))>>You unpack some of the food from your bag and eat up, forgetting about danger for a few moments. It leaves you feeling much better.
+<<else>>
+ <<run heal_wounds($player, roll_dice(1, 4, +1))>>You rummage in your bag for something to eat, but in vain. Still, a little rest is better than nothing.
+<</if>>
+
+@@text-align:center;
+ [[Go on now -> Corridor]]
+@@
+
+:: Refresh your spells
+
+<<set _refreshed = refresh_spells($player)>>You sit back and try to think which of the spells you know could use a refresher.
+
+<<if _refreshed.length > 0>>
+ <<for _spell range _refreshed>>\
+  <<if _spell.success>>\
+   You recite the words for _spell.name to yourself. They burn bright in your thoughts.
+  <<else>>\
+   You try to remember how to cast _spell.name, but can't seem to manage right now.
+  <</if>>\
+ <</for>>\
+
+@@text-align:center;
+ [[Go on now -> Corridor]]
+@@
+<<else>>
+ Unfortunately you can't seem to think of any. At least you wasted no time.
+
+@@text-align:center;
+ [[Choose again -> Eat and rest]]
+@@
+<</if>>
+
+:: Just press onward
+
+Best not to dawdle in a place like this. Danger could catch up any moment. You march on towards your goal instead.
+
+@@text-align:center;
+ [[Move on -> Corridor]]
+@@
+
+:: Challenge completed
+
+@@text-align:center;
+<<if $player.wounds >= $player.stamina * $player.size>>
+ [[You are badly hurt]]
+<<elseif $player.experience >= 1000>>
+ <<link [[You feel more capable]]>><<set $continue_to to "Respite">><</link>>
+<<else>>
+ [[Move on -> Respite]]
+<</if>>
+@@

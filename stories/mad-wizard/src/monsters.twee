@@ -1,0 +1,499 @@
+:: Encounter!
+
+<<switch random(1, 5)>>
+ <<case 1>><<include "Clockwork armor">>
+ <<case 2>><<include "Giant cockroaches">>
+ <<case 3>><<include "Carnivorous plants">>
+ <<case 4>><<include "Living shadows">>
+ <<case 5>><<include "Mass of tentacles">>
+<</switch>>
+
+:: Clockwork armor [monster]
+
+An armored... something is ambling towards you in the grinding of gears, puffs of steam escaping from various joints now and then. It's big. And has whirling blades for hands. You will have to deal with it to continue, one way or another.
+
+(This is a d12 creature armed with a +6/+6 weapon.)
+
+* [[Attack->Attack clockwork armor]]
+* [[Cast spell->Hex clockwork armor?]]
+* [[Flee]]
+
+:: Attack clockwork armor
+
+<<set _you_roll to roll_attack($player, all_monsters["armor"])>>\
+<<set _it_rolls to roll_attack(all_monsters["armor"], $player)>>\
+(You roll _you_roll against the opponent's _it_rolls.)
+
+<<if _you_roll > _it_rolls>>\
+ You watch the approaching monster carefully, weighing your options. A well-timed swing finds a weak point in the armor. It sags to the side, with a horrible grinding noise, and you run past without a second thought.<<set $player.experience += 250>><<set $story_progress += roll_dice(2, 6, +3)>>
+
+@@text-align:center;
+<<if $player.experience >= 1000>>
+ <<link [[You feel more capable]]>><<set $continue_to to "Search the place">><</link>>
+<<else>>
+ [[Move on -> Search the place]]
+<</if>>
+@@
+<<elseif _you_roll == _it_rolls>>\
+ You watch the approaching monster carefully, weighing your options. A well-timed swing connects with that huge breastplate. It rings hollow.
+
+@@text-align:center;
+ [[You backpedal in a hurry -> Clockwork armor]]
+@@
+<<else>>\
+ <<set $player.wounds += roll_damage(all_monsters["armor"], $player, _it_rolls - _you_roll)>>You swing at the monster. Between its whirling blades and jerky motions, it fails to connect. And then it counter-attacks. You barely have time to see it coming before getting hit.<<set $player.blessings += 1>>
+
+@@text-align:center;
+<<if $player.wounds >= $player.stamina * $player.size>>
+ [[You are badly hurt]]
+<<else>>
+ [[You backpedal in a hurry -> Clockwork armor]]
+<</if>>
+@@
+<</if>>\
+
+:: Hex clockwork armor?
+
+As the mechanical monstrosity approaches, you frantically wonder what sort of magic might be able to stop such a thing.
+
+<<include "Choose spell">>
+
+<<if $spell_count > 0>>
+@@text-align:center;
+ [[Cast spell -> Hex clockwork armor!]] / [[Think again -> Clockwork armor]]
+@@
+<<else>>
+Unfortunately, you draw a blank.
+
+@@text-align:center;
+ [[Try something else -> Clockwork armor]]
+@@
+<</if>>
+
+:: Hex clockwork armor!
+
+<<set $player.spellbook[$chosen_spell].charges -= 1>>\
+
+<<switch $chosen_spell>>
+ <<case "Snowdrift">>As a cold wind picks up all around you, blowing snow at the walking suit of armor, the grinding of gears becomes more erratic, then ceases entirely. You shuffle past the deadly contraption, now frozen solid.<<set $story_progress += roll_dice(2, 6, +3)>><<set $player.experience += 250>>
+
+@@text-align:center;
+<<if $player.experience >= 1000>>
+ <<link [[You feel more capable]]>><<set $continue_to to "Search the place">><</link>>
+<<else>>
+ [[Move on -> Search the place]]
+<</if>>
+@@
+ <<case "Undergrowth">>Strong vines sprout from the ground, pushing aside stones... grasping at the armored legs in their relentless march. They barely slow down the malefic machine, but that gives you enough time to get away.<<set $player.experience += 50>>
+
+<<include "Challenge completed">>
+ <<default>>You unleash your magic, but the walking suit of armor appears unfazed. You dive to safety in the nick of time, taking a glancing blow in the process.<<set $player.wounds += roll_dice(1, 4, +1)>>
+
+@@text-align:center;
+<<if $player.wounds >= $player.stamina * $player.size>>
+ [[You are badly hurt]]
+<<else>>
+ [[Think again -> Clockwork armor]]
+<</if>>
+@@
+<</switch>>
+
+:: Giant cockroaches [monster]
+
+A shifting mass skitters down the corridor, shiny brown carapaces glinting. It's made of cockroaches the size of a shoe, climbing over each other to get ahead faster. Now and then, one stops and wriggles feelers in your direction.
+
+(This is a d4 creature armed with +2/+4 mandibles.)
+
+* [[Attack->Attack giant cockroaches]]
+* [[Cast spell->Hex giant cockroaches?]]
+* [[Flee]]
+
+:: Attack giant cockroaches
+
+<<set _you_roll to roll_attack($player, all_monsters["roaches"])>>\
+<<set _it_rolls to roll_attack(all_monsters["roaches"], $player)>>\
+(You roll _you_roll against the opponent's _it_rolls.)
+
+<<if _you_roll > _it_rolls>>\
+ You launch into a deadly dance, kicking with your boots and swinging your weapon. Insects without number fall to your attacks. Many more remain, but faced with the onslaught, they scatter every which way.<<set $player.experience += 150>><<set $story_progress += roll_dice(2, 6, +3)>>
+
+@@text-align:center;
+<<if $player.experience >= 1000>>
+ <<link [[You feel more capable]]>><<set $continue_to to "Search the place">><</link>>
+<<else>>
+ [[Move on -> Search the place]]
+<</if>>
+@@
+<<elseif _you_roll == _it_rolls>>\
+ You hop around, stomping the ground with your boots. No luck hitting anything, but the cockroaches are too busy dodging to bite back.
+ 
+@@text-align:center;
+ [[You retreat to safety -> Giant cockroaches]]
+@@
+<<else>>\
+ <<set $player.wounds += roll_damage(all_monsters["roaches"], $player, _it_rolls - _you_roll)>>You stomp your boots all over the place, but the insects in front of you scuttle out of reach, while others come from behind to bite. It's all you can do not to get swarmed.<<set $player.blessings += 1>>
+
+@@text-align:center;
+<<if $player.wounds >= $player.stamina * $player.size>>
+ [[You are badly hurt]]
+<<else>>
+ [[You retreat to safety -> Giant cockroaches]]
+<</if>>
+@@
+<</if>>\
+
+:: Hex giant cockroaches?
+
+As the insectoid horde approaches, you frantically wonder what sort of magic might be able to stop that many of them.
+
+<<include "Choose spell">>
+
+<<if $spell_count > 0>>
+@@text-align:center;
+ [[Cast spell -> Hex cockroaches!]] / [[Think again -> Giant cockroaches]]
+@@
+<<else>>
+Unfortunately, you draw a blank.
+
+@@text-align:center;
+ [[Try something else -> Giant cockroaches]]
+@@
+<</if>>
+
+:: Hex cockroaches!
+
+<<set $player.spellbook[$chosen_spell].charges -= 1>>\
+
+<<switch $chosen_spell>>
+ <<case "Levitation">>At first nothing seems to happen, then you lift into the air and float away over the bulbous mass of chitin. A few daring insects lunge at you in passing, and it's all you can do to stay aloft, but you make it to safety.<<set $story_progress += roll_dice(2, 6, +3)>><<set $player.experience += 150>>
+
+@@text-align:center;
+<<if $player.experience >= 1000>>
+ <<link [[You feel more capable]]>><<set $continue_to to "Search the place">><</link>>
+<<else>>
+ [[Move on -> Search the place]]
+<</if>>
+@@
+ <<case "Snowdrift">>As a cold wind picks up all around you, blowing snow over the bulbous mass of chitin, the insects' frenzied skittering grows sluggish. They still never stop coming, but that gives you enough time to get away.<<set $player.experience += 50>>
+
+<<include "Challenge completed">>
+ <<case "Flamestrike">>A tall flame bursts from the ground in front of you, then surges forward as if carried by a strong wind. Surviving insects scatter desperately every which way. You walk onward as lingering fires nibble at your heels.<<set $story_progress += roll_dice(2, 6, +3)>><<set $player.wounds += roll_dice(1, 4, +1)>><<set $player.experience += 100>>
+
+@@text-align:center;
+<<if $player.wounds >= $player.stamina * $player.size>>
+ [[You are badly hurt]]
+<<elseif $player.experience >= 1000>>
+ <<link [[You feel more capable]]>><<set $continue_to to "Search the place">><</link>>
+<<else>>
+ [[Move on -> Search the place]]
+<</if>>
+@@
+ <<default>>You unleash your magic, but the endless parade of chitin appears unfazed. You scamper out of the way in the nick of time, getting bit in the process.<<set $player.wounds += roll_dice(1, 4, +1)>>
+
+@@text-align:center;
+<<if $player.wounds >= $player.stamina * $player.size>>
+ [[You are badly hurt]]
+<<else>>
+ [[Think again -> Giant cockroaches]]
+<</if>>
+@@
+<</switch>>
+
+:: Carnivorous plants [monster]
+
+From ceramic pots on either side of the corridor grow two leafy plants as tall as you are. Instead of flowers, they sport a dozen hungry mouths. All turn towards the noise and vibration as you draw near.
+
+(This is a d6 creature armed with a +3/+6 weapon.)
+
+* [[Attack -> Attack carnivorous plants]]
+* [[Cast spell -> Hex carnivorous plants?]]
+* [[Flee]]
+
+:: Attack carnivorous plants
+
+<<set _you_roll to roll_attack($player, all_monsters["plants"])>>\
+<<set _it_rolls to roll_attack(all_monsters["plants"], $player)>>\
+(You roll _you_roll against the opponent's _it_rolls.)
+
+<<if _you_roll > _it_rolls>>\
+ The plants lash at you with thorny vines, but you parry each of them with ease. A well-timed swing, and one of the toothy flowers falls to the ground. Then another, and another. The plants shrivel under the onslaught.<<set $player.experience += 200>><<set $story_progress += roll_dice(2, 6, +3)>>
+
+@@text-align:center;
+<<if $player.experience >= 1000>>
+ <<link [[You feel more capable]]>><<set $continue_to to "Search the place">><</link>>
+<<else>>
+ [[Move on -> Search the place]]
+<</if>>
+@@
+<<elseif _you_roll == _it_rolls>>\
+ The plants lash at you with thorny vines, and it's all you can do to keep from being torn to shreds, let alone strike back. This will not be so easy.
+ 
+@@text-align:center;
+ [[You retreat to safety -> Carnivorous plants]]
+@@
+<<else>>\
+ <<set $player.wounds += roll_damage(all_monsters["plants"], $player, _it_rolls - _you_roll)>>You swing at the plants, but they lash back with thorny vines that grasp and sting. Sooner or later, one of them finds its mark.<<set $player.blessings += 1>>
+
+@@text-align:center;
+<<if $player.wounds >= $player.stamina * $player.size>>
+ [[You are badly hurt]]
+<<else>>
+ [[You retreat to safety -> Carnivorous plants]]
+<</if>>
+@@
+<</if>>\
+
+:: Hex carnivorous plants?
+
+As the leafy beasts bar your way, you doubtfully wonder what sort of magic might be able to carry you past them.
+
+<<include "Choose spell">>
+
+<<if $spell_count > 0>>
+@@text-align:center;
+ [[Cast spell -> Hex plants!]] / [[Think again -> Carnivorous plants]]
+@@
+<<else>>
+Unfortunately, you draw a blank.
+
+@@text-align:center;
+ [[Try something else -> Carnivorous plants]]
+@@
+<</if>>
+
+:: Hex plants!
+
+<<set $player.spellbook[$chosen_spell].charges -= 1>>\
+
+<<switch $chosen_spell>>
+ <<case "Flamestrike">>A tall flame bursts from the ground in front of you, then surges forward as if carried by a strong wind. The plants burn down in moments, writhing horribly.<<set $story_progress += roll_dice(2, 6, +3)>><<set $player.experience += 50>>
+
+@@text-align:center;
+<<if $player.experience >= 1000>>
+ <<link [[You feel more capable]]>><<set $continue_to to "Search the place">><</link>>
+<<else>>
+ [[Move on -> Search the place]]
+<</if>>
+@@
+ <<case "Snowdrift">>As a cold wind picks up all around you, blowing snow over the murderous vines, their writhing grows sluggish. One still finds its mark as you run past.<<set $story_progress += roll_dice(2, 6, +3)>><<set $player.wounds += roll_dice(1, 4, +1)>><<set $player.experience += 100>>
+
+@@text-align:center;
+<<if $player.wounds >= $player.stamina * $player.size>>
+ [[You are badly hurt]]
+<<elseif $player.experience >= 1000>>
+ <<link [[You feel more capable]]>><<set $continue_to to "Search the place">><</link>>
+<<else>>
+ [[Move on -> Search the place]]
+<</if>>
+@@
+ <<case "Undergrowth">>Your own strong vines sprout from the ground, pushing aside stones... tangling with those barring the way forward. If anything, they are fraternizing.
+
+@@text-align:center;
+ [[Think again -> Carnivorous plants]]
+@@
+ <<default>>You unleash your magic, but the chlorophilian creeps appear unfazed. At least they can't reach you to counter-attack.
+
+@@text-align:center;
+ [[Think again -> Carnivorous plants]]
+@@
+<</switch>>
+
+:: Living shadows [monster]
+
+Deep shadows are dancing on the walls ahead of you, without a source of light that could cause it. Shadows with blood-red eyes and fangs. They peel off as you step closer and bar your way, floating in mid-air.
+
+(This is a d8 creature armed with a +4/+6 weapon.)
+
+* [[Attack -> Attack living shadows]]
+* [[Cast spell -> Hex living shadows?]]
+* [[Flee]]
+
+:: Attack living shadows
+
+<<set _you_roll to roll_attack($player, all_monsters["shadows"])>>\
+<<set _it_rolls to roll_attack(all_monsters["shadows"], $player)>>\
+(You roll _you_roll against the opponent's _it_rolls.)
+
+<<if _you_roll > _it_rolls>>\
+ You watch the approaching monsters carefully, weighing your options. A well-timed swing shears one of them in half, tatters of shadow soon melting away. The others scatter, and you run past without a second thought.<<set $player.experience += 200>><<set $story_progress += roll_dice(2, 6, +3)>>
+
+@@text-align:center;
+<<if $player.experience >= 1000>>
+ <<link [[You feel more capable]]>><<set $continue_to to "Search the place">><</link>>
+<<else>>
+ [[Move on -> Search the place]]
+<</if>>
+@@
+<<elseif _you_roll == _it_rolls>>\
+ You watch the approaching monsters carefully, weighing your options. A series of rapid swings meets nothing but air. At least it keeps them busy.
+
+@@text-align:center;
+ [[You backpedal in a hurry -> Living shadows]]
+@@
+<<else>>\
+ <<set $player.wounds += roll_damage(all_monsters["shadows"], $player, _it_rolls - _you_roll)>>You swing at the monsters, but they dance around confusingly. You hit nothing but air. Then they counter-attack, biting and slashing from all sides.<<set $player.blessings += 1>>
+
+@@text-align:center;
+<<if $player.wounds >= $player.stamina * $player.size>>
+ [[You are badly hurt]]
+<<else>>
+ [[You backpedal in a hurry -> Living shadows]]
+<</if>>
+@@
+<</if>>\
+
+:: Hex living shadows?
+
+As the creatures of darkness draw closer, you frantically wonder what sort of magic might be able to stop such things.
+
+<<include "Choose spell">>
+
+<<if $spell_count > 0>>
+@@text-align:center;
+ [[Cast spell -> Hex living shadows!]] / [[Think again -> Living shadows]]
+@@
+<<else>>
+Unfortunately, you draw a blank.
+
+@@text-align:center;
+ [[Try something else -> Living shadows]]
+@@
+<</if>>
+
+:: Hex living shadows!
+
+<<set $player.spellbook[$chosen_spell].charges -= 1>>\
+
+<<switch $chosen_spell>>
+ <<case "Windstorm">>At first nothing seems to happen, then a strong wind picks up, and soon grows into a howling gale. The shadows are blown away with a vengeance.<<set $story_progress += roll_dice(2, 6, +3)>><<set $player.experience += 200>>
+
+@@text-align:center;
+<<if $player.experience >= 1000>>
+ <<link [[You feel more capable]]>><<set $continue_to to "Search the place">><</link>>
+<<else>>
+ [[Move on -> Search the place]]
+<</if>>
+@@
+ <<case "Flamestrike">>A tall flame bursts from the ground in front of you, then surges forward as if carried by a strong wind. Light from the fire pushes the shadows flat against the walls. They promptly return, but you get enough time to escape.<<set $player.experience += 50>>
+
+<<include "Challenge completed">>
+ <<default>>You unleash your magic, but the shadows dancing around you appear unfazed. You retreat out of the way in the nick of time, getting bit in the process.<<set $player.wounds += roll_dice(1, 4, +1)>>
+
+@@text-align:center;
+<<if $player.wounds >= $player.stamina * $player.size>>
+ [[You are badly hurt]]
+<<else>>
+ [[Think again -> Living shadows]]
+<</if>>
+@@
+<</switch>>
+
+:: Mass of tentacles [monster]
+
+Writhing, wriggling tentacles are feeling their way along the corridor in your direction, squelching wetly. Lots and lots of them, bound together. If there's a body in the middle of it all, you couldn't say.
+
+(This is a d10 creature armed with +6/+4 suction cups.)
+
+* [[Attack -> Attack mass of tentacles]]
+* [[Cast spell -> Hex mass of tentacles?]]
+* [[Flee]]
+
+:: Attack mass of tentacles
+
+<<set _you_roll to roll_attack($player, all_monsters["tentacles"])>>\
+<<set _it_rolls to roll_attack(all_monsters["tentacles"], $player)>>\
+(You roll _you_roll against the opponent's _it_rolls.)
+
+<<if _you_roll > _it_rolls>>\
+ You watch the approaching monster carefully, weighing your options. A well-timed swing shears off a few tentacles. The rest of it curls up into a ball, writhing horribly, and you run past without a second thought.<<set $player.experience += 200>><<set $story_progress += roll_dice(2, 6, +3)>>
+
+@@text-align:center;
+<<if $player.experience >= 1000>>
+ <<link [[You feel more capable]]>><<set $continue_to to "Search the place">><</link>>
+<<else>>
+ [[Move on -> Search the place]]
+<</if>>
+@@
+<<elseif _you_roll == _it_rolls>>\
+ You watch the approaching monster carefully, weighing your options. Your swings are slapped out of the air by tentacles. At least it's a stalemate.
+
+@@text-align:center;
+ [[Think again -> Mass of tentacles]]
+@@
+<<else>>\
+ <<set $player.wounds += roll_damage(all_monsters["tentacles"], $player, _it_rolls - _you_roll)>>You swing at the monster, but the confusing dance of tentacles makes you miss. And then it counter-attacks, slapping you around like a ragdoll. It hurts.<<set $player.blessings += 1>>
+
+@@text-align:center;
+<<if $player.wounds >= $player.stamina * $player.size>>
+ [[You are badly hurt]]
+<<else>>
+ [[You backpedal in a hurry -> Mass of tentacles]]
+<</if>>
+@@
+<</if>>\
+
+:: Hex mass of tentacles?
+
+As the pile of flesh squirms closer, you frantically wonder what sort of magic might be able to stop such a thing.
+
+<<include "Choose spell">>
+
+<<if $spell_count > 0>>
+@@text-align:center;
+ [[Cast spell -> Hex tentacles!]] / [[Think again -> Mass of tentacles]]
+@@
+<<else>>
+Unfortunately, you draw a blank.
+
+@@text-align:center;
+ [[Try something else -> Mass of tentacles]]
+@@
+<</if>>
+
+:: Hex tentacles!
+
+<<set $player.spellbook[$chosen_spell].charges -= 1>>\
+
+<<switch $chosen_spell>>
+ <<case "Undergrowth">>Strong vines sprout from the ground, pushing aside stones, grasping at the writhing tentacles and pinning them down. You run past while you still can.<<set $story_progress += roll_dice(2, 6, +3)>><<set $player.experience += 200>>
+
+@@text-align:center;
+<<if $player.experience >= 1000>>
+ <<link [[You feel more capable]]>><<set $continue_to to "Search the place">><</link>>
+<<else>>
+ [[Move on -> Search the place]]
+<</if>>
+@@
+ <<case "Levitation">>As the spell takes hold, you lift into the air and float away over the quivering pile of flesh. Tentacles whip through the air. You dodge, but still take a glancing blow before reaching safety.<<set $story_progress += roll_dice(2, 6, +3)>><<set $player.wounds += roll_dice(1, 4, +1)>><<set $player.experience += 100>>
+
+@@text-align:center;
+<<if $player.wounds >= $player.stamina * $player.size>>
+ [[You are badly hurt]]
+<<elseif $player.experience >= 1000>>
+ <<link [[You feel more capable]]>><<set $continue_to to "Search the place">><</link>>
+<<else>>
+ [[Move on -> Search the place]]
+<</if>>
+@@
+ <<default>>You unleash your magic, but it just washes over the quivering flesh. You dive to safety in the nick of time, taking a glancing blow in the process.<<set $player.wounds += roll_dice(1, 4, +1)>>
+
+@@text-align:center;
+<<if $player.wounds >= $player.stamina * $player.size>>
+ [[You are badly hurt]]
+<<else>>
+ [[Think again -> Living shadows]]
+<</if>>
+@@
+<</switch>>
+
+:: Flee
+
+<<set $story_progress -= roll_dice(2, 6, +3)>>You'd rather not face such dangers right now. Best to retrace your steps, even at the cost of losing progress. There must be some other way forward. A safer one.
+
+@@text-align:center;
+<<if $story_progress > 0>>
+ [[Retreat, for now -> Respite]]
+<<else>>
+ [[Retreat, for now -> A doorway too far]]
+<</if>>
+@@

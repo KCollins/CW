@@ -1,0 +1,51 @@
+/*@import url("https://fontlibrary.org/face/nova");*/
+body {
+	Font-size: 16pt;
+	Font-family: NovaCut, sans-serif;
+	Background-color: tan;
+}
+
+#passages {
+	Background-color: white;
+	Color: black;
+	Padding: 1em;
+	Box-shadow: 0.5ex 0.5ex 0.5ex saddlebrown;
+	Line-height: 1.5em;
+	Text-align: justify;
+}
+
+#passages p { Text-indent: 5ex; }
+#passages input[type=text] {
+	Color: black;
+	Background-color: white;
+}
+
+#ui-bar {
+	Color: white;
+	Background-color: saddlebrown;
+}
+
+#passages button, #ui-dialog-body button {
+	Font-family: "Nova Cut";
+	Font-size: 16pt;
+	Color: white;
+	Background-color: saddlebrown;
+	Padding: 0.5ex;
+	Margin: 0.5ex;
+	Border-radius: 1em;
+	Width: 6em;
+}
+
+#ui-dialog-titlebar { Background-color: saddlebrown; }
+#ui-dialog-body ul { Line-height: 1em; }
+
+.header {
+	Background-color: black;
+	Color: white;
+	Text-align: center;
+	Font-size: 14pt;
+	Margin-bottom: 1ex;
+	Padding: 0.5ex 1ex;
+}
+.header .left { Float: left; }
+.header .right { Float: right; }
