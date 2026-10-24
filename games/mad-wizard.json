@@ -1,0 +1,814 @@
+{
+  "title": "Keep of the Mad Wizard",
+  "author": "Felix Ple\u0219oianu",
+  "startRoom": "start",
+  "rooms": {
+    "start": {
+      "name": "START",
+      "desc": "After much bitter fighting, the mad wizard was defeated and banished to distant shores. But the land is not yet at peace. Every night, terrible things ride forth from the wizard's former home, tormenting peasant and noble alike. Many have entered the keep of the mad wizard to find and seal away the source of evil. The few who returned at all describe an ever-shifting maze of treachery and danger. Still, what else to do than try again. And it's your turn. @@text-align:center; @@",
+      "exits": {
+        "go forth, hero": "character_creation"
+      },
+      "items": []
+    },
+    "storybanner": {
+      "name": "STORYBANNER",
+      "desc": "No Time To Play, 2019",
+      "exits": {},
+      "items": []
+    },
+    "storytitle": {
+      "name": "STORYTITLE",
+      "desc": "Keep of the Mad Wizard",
+      "exits": {},
+      "items": []
+    },
+    "storysubtitle": {
+      "name": "STORYSUBTITLE",
+      "desc": "a jumbled gamebook",
+      "exits": {},
+      "items": []
+    },
+    "storyauthor": {
+      "name": "STORYAUTHOR",
+      "desc": "Felix Ple\u015foianu",
+      "exits": {},
+      "items": []
+    },
+    "storymenu": {
+      "name": "STORYMENU",
+      "desc": "",
+      "exits": {
+        "credits": "credits",
+        "help": "help",
+        "license": "license"
+      },
+      "items": []
+    },
+    "storysettings": {
+      "name": "STORYSETTINGS",
+      "desc": "ifid:75b44825-9d9f-418c-8990-7ccbb75e8686",
+      "exits": {},
+      "items": []
+    },
+    "credits": {
+      "name": "CREDITS",
+      "desc": "@@text-align:center; ''Keep of the Mad Wizard'' A 2019 game by . Made with and . Font: , courtesy of the Open Font Library. @@",
+      "exits": {
+        "no time to play": "https://notimetoplay.org/",
+        "tweego": "http://www.motoslave.net/tweego/",
+        "sugarcube 2": "http://www.motoslave.net/sugarcube/2/",
+        "novacut": "https://fontlibrary.org/en/font/nova"
+      },
+      "items": []
+    },
+    "help": {
+      "name": "HELP",
+      "desc": "//Keep of the Mad Wizard// uses the rules. You don't have to know them, the game will roll dice for you as needed. Some details however may be less obvious: * Your goal is to gather 100 points of progress and trigger the endgame. Mostly you do that by overcoming monsters and obstacles. * Exploring uses up energy. When you're tired, wandering monsters catch up with you, and then you have a fight on your hands. * You can run away from a fight (or an obstacle), but you're going to lose progress. * Lose enough progress and you'll end up running out of the keep altogether, ending the game. * The one other way to lose is to end up with more wounds than health. Hope this helps. Have fun! @@text-align:center; @@",
+      "exits": {
+        "battles & balances": "https://notimetoplay.itch.io/battles-and-balances"
+      },
+      "items": []
+    },
+    "license": {
+      "name": "LICENSE",
+      "desc": "//Keep of the Mad Wizard// is free and open source software under the ; a copy is included in the source package (where available). Unless you plan to modify or distribute the game, don't worry about it. The NovaCut font is provided under the SIL Open Font License. You only need to mind that if you extract the font file from the game for other uses. @@text-align:center; @@",
+      "exits": {
+        "artistic license 2.0": "https://opensource.org/licenses/artistic-2.0"
+      },
+      "items": []
+    },
+    "character_creation": {
+      "name": "CHARACTER CREATION",
+      "desc": "As the dark fortress looms ahead of you, you reflect on life until this point. <label>What's your name? </label> What do you bring to this battle? <label> My steel and determination!</label> <label> Quick wits and nimble limbs!</label> <label> The light of knowledge! </label> @@text-align:center; @@",
+      "exits": {
+        "go on": "backstory"
+      },
+      "items": []
+    },
+    "backstory": {
+      "name": "BACKSTORY",
+      "desc": "\\ '' the '' \\ When evil threatens the well-being of honest, hard working people, you are there to set things right. Brawn and blade are the tools of your trade, that you wield bravely, yet fairly. But will they be enough where better people have failed? Only one way to find out. (Muscle +1, Stamina +1) \\ Sometimes the fastest path to the core of things is all the way around. You were never one to follow the rules anyway. What looks right all too often depends on where you stand. Well, except for that place. That looks wrong no matter what. So you'll help... your way. (Agility +1, Speed +1) \\ One can't fight fire with fire, but who else can figure out how magic can turn out so wrong than another master of the art? Your arcane skills have served you well so far. They should help you get to the bottom of this, too. Maybe people will trust you more then. (Focus +2) \\ \\ @@text-align:center; / @@",
+      "exits": {
+        "yes, that was it": "title_page"
+      },
+      "items": []
+    },
+    "title_page": {
+      "name": "TITLE PAGE",
+      "desc": "@@text-align:center; ! by '''' @@",
+      "exits": {
+        "turn the page": "prologue"
+      },
+      "items": []
+    },
+    "prologue": {
+      "name": "PROLOGUE",
+      "desc": "Royal troops are milling about the conquered castle's courtyard, their job mostly to prevent people and animals from wandering into the keep by mistake. It's not in their power to stop the flying nightmares jumping off its rooftop after sunset, so at those times they hide with everyone else. In broad daylight, the keep seems perpetually covered by clouds, even when no trace of one can be seen overhead. Otherwise there's no sign of life from within. Yet the mad wizard's power lives on. The broken doors creak a death song as you walk inside. Soon they remain behind. It's just you and the keep now. @@text-align:center; @@",
+      "exits": {
+        "begin your journey": "corridor"
+      },
+      "items": []
+    },
+    "passageheader": {
+      "name": "PASSAGEHEADER",
+      "desc": "<div class=\"header\"> <span class=\"left\">Progress </span> Health <span class=\"right\">Energy </span> </div>",
+      "exits": {},
+      "items": []
+    },
+    "passagefooter": {
+      "name": "PASSAGEFOOTER",
+      "desc": "@@text-align:center;Margin-top: 2em; Dialog.setup(\"Charsheet\"); Dialog.wiki(Story.get(\"Charsheet\").processText()); Dialog.open(); Dialog.setup(\"Inventory\"); Dialog.wiki(Story.get(\"Inventory\").processText()); Dialog.open(); Dialog.setup(\"Spellbook\"); Dialog.wiki(Story.get(\"Spellbook\").processText()); Dialog.open(); @@",
+      "exits": {},
+      "items": []
+    },
+    "charsheet": {
+      "name": "CHARSHEET",
+      "desc": "@@text-align:center; !! $player_name the $player_class @@\\ \\ * : $player[_attr] (+1) \\ @@text-align:center; Size: d$player.size Wounds: $player.wounds / Blessings: $player.blessings Experience: $player.experience @@",
+      "exits": {},
+      "items": []
+    },
+    "inventory": {
+      "name": "INVENTORY",
+      "desc": "@@text-align:center; ''You are carrying'' @@ Rations: $player.inventory.rations \\ \\ * Potion of _potion x \\ \\ Weapon: $player.weapon.name (+$player.weapon.attack / +$player.weapon.damage) Armor: $player.armor.name (+$player.armor.protection) @@text-align:center; @@",
+      "exits": {},
+      "items": []
+    },
+    "spellbook": {
+      "name": "SPELLBOOK",
+      "desc": "@@text-align:center; ''Spells you have'' @@ \\ * _spell (level _data.level) x \\ @@text-align:center; @@",
+      "exits": {},
+      "items": []
+    },
+    "choose_spell": {
+      "name": "CHOOSE SPELL",
+      "desc": "\\ \\ \\ <label> _spell</label> \\ \\",
+      "exits": {},
+      "items": []
+    },
+    "choose_potion": {
+      "name": "CHOOSE POTION",
+      "desc": "\\ \\ \\ <label> _potion</label> \\ \\",
+      "exits": {},
+      "items": []
+    },
+    "you_feel_more_capable": {
+      "name": "YOU FEEL MORE CAPABLE",
+      "desc": "With all the recent exertions, your abilities have been growing. Upcoming challenges should be that much easier to deal with. But in what area? <label> Muscle</label> <label> Stamina</label> <label> Agility</label> <label> Speed</label> <label> Focus</label> @@text-align:center; @@",
+      "exits": {},
+      "items": []
+    },
+    "you_are_badly_hurt": {
+      "name": "YOU ARE BADLY HURT",
+      "desc": "As you bleed from one wound too many, a loud buzzing fills your ears, and everything goes dark. The fall that follows feels long indeed. You wake up much later, in what turns out to be a healer's hut. And the keep is still back there, its evil intact. Waiting. Taunting. One day you'll be given another chance. But maybe after some rest. @@text-align:center; ''The End?'' @@",
+      "exits": {},
+      "items": []
+    },
+    "a_doorway_too_far": {
+      "name": "A DOORWAY TOO FAR",
+      "desc": "Bright light shines from somewhere up ahead as you try to put more distance between yourself and that... that... You run towards the opening only to find yourself outside, in the sun, among overgrown vegetation. Behind you, the stone wall of the keep is blank and smooth. You return the long way around, to join the ranks of those who would have another chance, if deemed worthy. @@text-align:center; ''The End?'' @@",
+      "exits": {},
+      "items": []
+    },
+    "corridor": {
+      "name": "CORRIDOR",
+      "desc": "You are in a corridor that twists and turns, lined with fake doors and stairs that lead nowhere. But only statues in their niches are watching. You are in a passage with low ceiling that presses down on you, dimming the light and amplifying echoes. But it's only your steps ringing. You are in a hall of wood and brick, crooked columns strewn about at random, as if to better hide creatures of the dark. But nothing stirs. * * *",
+      "exits": {
+        "drink a potion": "drink_a_potion",
+        "proceed cautiously": "proceed_cautiously",
+        "just move on already": "just_move_on_already"
+      },
+      "items": []
+    },
+    "drink_a_potion": {
+      "name": "DRINK A POTION",
+      "desc": "You rummage through your bag for something that can give you a boost. @@text-align:center; / @@ Unfortunately, you come up empty-handed. @@text-align:center; @@",
+      "exits": {
+        "drink": "drink_a_potion!",
+        "think again": "corridor",
+        "try something else": "corridor"
+      },
+      "items": []
+    },
+    "drink_a_potion!": {
+      "name": "DRINK A POTION!",
+      "desc": "You uncork the potion of $chosen_potion and gulp it down. Within moments, its power spreads through your body, burning. In fact, so soon after the last one it burns badly. Power comes at a cost. @@text-align:center; @@",
+      "exits": {
+        "you are badly hurt": "you_are_badly_hurt",
+        "go on now": "corridor"
+      },
+      "items": []
+    },
+    "proceed_cautiously": {
+      "name": "PROCEED CAUTIOUSLY",
+      "desc": "Best not to dwell for too long in a place like this. Still better than rushing headlong into whatever dangers may lie ahead. You advance step by step, watching your surroundings. @@text-align:center; @@",
+      "exits": {
+        "moments later...": "encounter!"
+      },
+      "items": []
+    },
+    "just_move_on_already": {
+      "name": "JUST MOVE ON ALREADY",
+      "desc": "Best not to dwell for too long in a place like this. Who knows what might lurk in shadowy corners. You stride forth, towards your destination. Better the danger that lies ahead of you. @@text-align:center; @@",
+      "exits": {
+        "moments later...": "encounter!"
+      },
+      "items": []
+    },
+    "sideroom": {
+      "name": "SIDEROOM",
+      "desc": "A discreet doorway in the shadows leads to a room that hasn't seen use in a while. The walls are bare; the floor, cold. An empty coffer is rotting away opposite from a rusty candle holder. A throrough search fails to turn up anything useful. @@text-align:center; @@ On closer inspection, there is a secret passage in the far corner, going off who knows where. @@text-align:center; @@",
+      "exits": {
+        "continue on your way": "corridor",
+        "brave the passage": "secret_passage",
+        "leave it alone": "corridor"
+      },
+      "items": []
+    },
+    "secret_passage": {
+      "name": "SECRET PASSAGE",
+      "desc": "The secret passage meanders all over the place, turning and twisting. Somehow, you get the feeling it leads closer to your destination. @@text-align:center; @@ The secret passage meanders all over the place, turning and twisting. You get the impression it leads to a whole other part of the keep. @@text-align:center; @@ The secret passage meanders all over the place, turning and twisting. It's enough to make one paranoid about running into something bad. @@text-align:center; @@",
+      "exits": {
+        "move on": "search_the_place",
+        "in fact...": "encounter!"
+      },
+      "items": []
+    },
+    "portcullis": {
+      "name": "PORTCULLIS",
+      "desc": "Here the way forward narrows into a small doorway, itself barred by a portcullis of wood and iron. There's no obvious way to open it on either side. Brawn alone can prevail here... or is there some other, hidden way? (Roll muscle against a target of 50 to pass unhurt, or take 1d4+1 damage.) * * *",
+      "exits": {
+        "lift the portcullis": "lift_the_portcullis",
+        "magic your way through": "hex_portcullis?",
+        "no way, go back": "no_way,_go_back"
+      },
+      "items": []
+    },
+    "lift_the_portcullis": {
+      "name": "LIFT THE PORTCULLIS",
+      "desc": "You brace yourself and strain against the bars. The gate begins to lift... (You roll _you_roll against the target of 50.) All of a sudden there's enough room for you to pass underneath. It crashes back down with a resounding clang, but by then you're clear through. Sharp pains courses through your limbs, and you drop it with a resounding clang. No way you can try again right now. You'll know what to do next time. For now...",
+      "exits": {},
+      "items": []
+    },
+    "hex_portcullis?": {
+      "name": "HEX PORTCULLIS?",
+      "desc": "With the see-through gate in front of you, taunting, you wonder what sort of spell might be able to get you past it. @@text-align:center; / @@ Unfortunately, you draw a blank. @@text-align:center; @@",
+      "exits": {
+        "cast spell": "hex_portcullis!",
+        "think again": "portcullis",
+        "try something else": "portcullis"
+      },
+      "items": []
+    },
+    "hex_portcullis!": {
+      "name": "HEX PORTCULLIS!",
+      "desc": "\\ Strong vines sprout from the ground, pushing aside stones, grasping at the bars... and lifting them off the ground. All of a sudden there's enough room for you to pass underneath. You go ahead while the spell holds. @@text-align:center; @@ A tall flame bursts from the ground in front of you, then surges forward as if carried by a strong wind. It passes straight through the gate, leaving scattered licks of flame on the bars, but the hard wood fails to ignite. @@text-align:center; @@ You unleash your magic, but it doesn't seem to make much of a difference. It will take more than that to pass. @@text-align:center; @@",
+      "exits": {
+        "move on": "respite",
+        "think again": "portcullis"
+      },
+      "items": []
+    },
+    "icicle_patch": {
+      "name": "ICICLE PATCH",
+      "desc": "The air is colder here all of a sudden. There's snow on the floor, and frost on the walls. Countless icicles dangle from the ceiling, clinking with every step you take. To dodge the falling daggers as you run will be a challenge. (Roll agility against a target of 40 to pass unhurt, or take 1d6+4 damage.) * * *",
+      "exits": {
+        "brave the icicles": "brave_the_icicles",
+        "magic your way through": "hex_icicles?",
+        "no way, go back": "no_way,_go_back"
+      },
+      "items": []
+    },
+    "brave_the_icicles": {
+      "name": "BRAVE THE ICICLES",
+      "desc": "You take a deep breath and dart forward, weaving a path among the translucent daggers. It feels like a long way to the end of the gauntlet, but then... (You roll _you_roll against the target of 40.) You made it through, and unscathed at that. A moment's rest, then onward to your goal! As you take hit after hit, relief suddenly seems too far away. You turn around, bleeding and battered. You'll know what to do next time. For now...",
+      "exits": {},
+      "items": []
+    },
+    "hex_icicles?": {
+      "name": "HEX ICICLES?",
+      "desc": "With the daggers of ice in front of you, taunting, you wonder what sort of spell might be able to get you past them. @@text-align:center; / @@ Unfortunately, you draw a blank. @@text-align:center; @@",
+      "exits": {
+        "cast spell": "hex_icicles!",
+        "think again": "icicle_patch",
+        "try something else": "icicle_patch"
+      },
+      "items": []
+    },
+    "hex_icicles!": {
+      "name": "HEX ICICLES!",
+      "desc": "\\ A tall flame bursts from the ground in front of you, then surges forward as if carried by a strong wind. The rising heat causes most icicles to shake loose, littering the ground. They crinkle under your feet as you walk past. At first nothing seems to happen, then a strong wind picks up, and soon grows into a howling gale. Many icicles are shaken loose; enough remain to bruise you on the way through. As the spell takes hold, you lift into the air and float away. The air current from your passage still knocks down enough icicles to bruise you. You unleash your magic, but it doesn't seem to make much of a difference. It will take more than that to pass. @@text-align:center; @@",
+      "exits": {
+        "think again": "icicle_patch"
+      },
+      "items": []
+    },
+    "mud_bath": {
+      "name": "MUD BATH",
+      "desc": "Here the corridor widens into a sort of pool, only it's filled with a stinky mud colored green-brown. Probing with a convenient stick reveals it's about waist-deep, at least near the edge. It will take resilience to cross over. (Roll stamina against a target of 50 to pass unhurt, or take 1d4+1 damage.) * * *",
+      "exits": {
+        "brave the mud bath": "brave_the_mud_bath",
+        "magic your way through": "hex_mud_bath?",
+        "no way, go back": "no_way,_go_back"
+      },
+      "items": []
+    },
+    "brave_the_mud_bath": {
+      "name": "BRAVE THE MUD BATH",
+      "desc": "You wade into the pool. Strangely enough, the mud does't seem to stick... much. (You roll _you_roll against the target of 50.) It feels like a never-ending slog, but at long last the other side is right in front of you. It brings the goal that much closer. Well, after some rest. You're not close to the halfway point, and every muscle aches. Better to return before collapsing in //that//. You'll know what to do next time. For now...",
+      "exits": {},
+      "items": []
+    },
+    "hex_mud_bath?": {
+      "name": "HEX MUD BATH?",
+      "desc": "With the wide-open space in front of you, taunting, you wonder what sort of spell might be able to get you past it. @@text-align:center; / @@ Unfortunately, you draw a blank. @@text-align:center; @@",
+      "exits": {
+        "cast spell": "hex_mud_bath!",
+        "think again": "mud_bath",
+        "try something else": "mud_bath"
+      },
+      "items": []
+    },
+    "hex_mud_bath!": {
+      "name": "HEX MUD BATH!",
+      "desc": "\\ As the spell takes hold, you lift into the air and float away over the stinky morass. The fumes rising from it are hard to endure, but you make it. As a cold wind picks up all around you, blowing snow over the pool, the mud covers with a thin sheet of ice. It holds your weight for over half the distance, but then you fall in and have to wade the rest of the way. It hurts. At first nothing seems to happen, but in the end a few timid vines poke their tips above the mud. They're nowhere near enough to support your weight. @@text-align:center; @@ You unleash your magic, but it doesn't seem to make much of a difference. It will take more than that to pass. @@text-align:center; @@",
+      "exits": {
+        "think again": "mud_bath"
+      },
+      "items": []
+    },
+    "poison_cloud": {
+      "name": "POISON CLOUD",
+      "desc": "From wall to wall and from floor to ceiling, the corridor ahead of you is filled with fumes colored a sickly yellow. Best not to breathe it, whatever it is. But can you get to the other side quickly enough? (Roll speed against a target of 40 to pass unhurt, or take 1d6+4 damage.) * * *",
+      "exits": {
+        "brave the poison cloud": "brave_the_poison_cloud",
+        "magic your way through": "hex_poison_cloud?",
+        "no way, go back": "no_way,_go_back"
+      },
+      "items": []
+    },
+    "brave_the_poison_cloud": {
+      "name": "BRAVE THE POISON CLOUD",
+      "desc": "You hold your breath and start running. Soon yellow clouds are all you can see. (You roll _you_roll against the target of 40.) It feels like a never-ending nightmare, but at long last you hit clean air. It brings the goal that much closer. Well, after your lungs stop burning. You're not close to the halfway point, and your lungs are burning. Better to return before collapsing in //that//. You'll know what to do next time. For now...",
+      "exits": {},
+      "items": []
+    },
+    "hex_poison_cloud?": {
+      "name": "HEX POISON CLOUD?",
+      "desc": "With the swirling clouds in front of you, taunting, you wonder what sort of spell might be able to get you past them. @@text-align:center; / @@ Unfortunately, you draw a blank. @@text-align:center; @@",
+      "exits": {
+        "cast spell": "hex_poison_cloud!",
+        "think again": "poison_cloud",
+        "try something else": "poison_cloud"
+      },
+      "items": []
+    },
+    "hex_poison_cloud!": {
+      "name": "HEX POISON CLOUD!",
+      "desc": "\\ At first nothing seems to happen, then a strong wind picks up, and soon grows into a howling gale. Soon not a trace remains of the yellow clouds. A tall flame bursts from the ground in front of you, then surges forward as if carried by a strong wind. Unfortunately the yellow clouds fail to burn. @@text-align:center; @@ You unleash your magic, but it doesn't seem to make much of a difference. It will take more than that to pass. @@text-align:center; @@",
+      "exits": {
+        "think again": "poison_cloud"
+      },
+      "items": []
+    },
+    "trapped_passage": {
+      "name": "TRAPPED PASSAGE",
+      "desc": "The floor going forward is made of multicolored tiles that form an elusive pattern. Many of them seem loose. At either hand, little holes line the walls, countless darts waiting to spring if you take a single wrong step. This one will take keep eyes and concentration to get through. (Roll focus against a target of 40 to pass unhurt, or take 1d6+4 damage.) * * *",
+      "exits": {
+        "brave the trapped passage": "brave_the_trapped_passage",
+        "magic your way through": "hex_traps?",
+        "no way, go back": "no_way,_go_back"
+      },
+      "items": []
+    },
+    "brave_the_trapped_passage": {
+      "name": "BRAVE THE TRAPPED PASSAGE",
+      "desc": "You take a deep breath and dart forward, weaving a path between the trapped floor tiles. It feels like a long way to the end of the gauntlet, but then... (You roll _you_roll against the target of 40.) You made it through, and unscathed at that. A moment's rest, then onward to your goal! It's a step and a miss. You dodge a dart or two, but others find their mark. Turning around before their sting kills, you'll know what to do next time. For now...",
+      "exits": {},
+      "items": []
+    },
+    "hex_traps?": {
+      "name": "HEX TRAPS?",
+      "desc": "With the mechanical gauntlet in front of you, taunting, you wonder what sort of spell might be able to get you past it. @@text-align:center; / @@ Unfortunately, you draw a blank. @@text-align:center; @@",
+      "exits": {
+        "cast spell": "hex_traps!",
+        "think again": "trapped_passage",
+        "try something else": "trapped_passage"
+      },
+      "items": []
+    },
+    "hex_traps!": {
+      "name": "HEX TRAPS!",
+      "desc": "As the spell takes hold, you lift into the air and float away over the killer floor. It seems to go on for a long time, but now it carries no danger. As a cold wind picks up all around you, blowing snow over the pool, you can hear the deadly mechanisms seizing up. Only a few keep working, as you discover painfully on your way through. Strong vines sprout from the ground and grow rapidly, pushing aside floor tiles left and right. A few traps are sprung, others jammed, but most remain functional. This is not the way. @@text-align:center; @@ You unleash your magic, but it doesn't seem to make much of a difference. It will take more than that to pass. @@text-align:center; @@",
+      "exits": {
+        "think again": "trapped_passage"
+      },
+      "items": []
+    },
+    "dead_end": {
+      "name": "DEAD END",
+      "desc": "The corridor ends abruptly in a blank wall. It lacks even the carvings that decorate other areas. Otherwise there's no sign of new construction work. A throrough search fails to turn up anything useful. @@text-align:center; @@ On closer inspection, there is a secret passage right in the middle, going off who knows where. @@text-align:center; @@",
+      "exits": {
+        "head back": "corridor",
+        "brave the passage": "secret_passage",
+        "leave it alone": "corridor"
+      },
+      "items": []
+    },
+    "no_way,_go_back": {
+      "name": "NO WAY, GO BACK",
+      "desc": "That looks much too dangerous. Best to retrace your steps, even at the cost of losing progress. There must be some other way forward. A safer one. @@text-align:center; @@",
+      "exits": {
+        "retreat, for now": "a_doorway_too_far"
+      },
+      "items": []
+    },
+    "monster_lair": {
+      "name": "MONSTER LAIR",
+      "desc": "A previous adventurer's equipment is scattered all over the place, but there's no trace of its owner apart from a blood trail leading off somewhere. On closer inspection, the blood trail leads straight to a solid wall, and stops there. On closer inspection, the blood trail leads back in the direction where you came from. On closer inspection, the blood trail leads to the edge of a bottomless pit. * *",
+      "exits": {
+        "rummage through the clutter": "rummage_through_the_clutter",
+        "just move on": "corridor"
+      },
+      "items": []
+    },
+    "rummage_through_the_clutter": {
+      "name": "RUMMAGE THROUGH THE CLUTTER",
+      "desc": "This feels wrong, but then again the previous owner doesn't need their stuff anymore by the looks of it, while in your hands it could help save the land. Unfortunately, none of it seems to be usable anymore. You leave empty-handed. With a little patience, you manage to find a potion of . Should come in handy. With a little patience, you manage to find a scroll of . Should come in handy. With a little patience, you manage to find a potion of and a scroll of . Both should come in handy. @@text-align:center; @@",
+      "exits": {
+        "go on now": "corridor"
+      },
+      "items": []
+    },
+    "kitchen": {
+      "name": "KITCHEN",
+      "desc": "Pots and pans hang on the brick wall above a stove made to cook for many. Shelves line the other walls, and a long table takes up the middle of the room. The table is rough, wobbly and stained, but otherwise looks clean. * *",
+      "exits": {
+        "raid the pantry": "raid_the_pantry",
+        "just move on": "corridor"
+      },
+      "items": []
+    },
+    "raid_the_pantry": {
+      "name": "RAID THE PANTRY",
+      "desc": "Well, the place looks deserted. Nobody's going to miss a loaf of bread, right? Whoa! What was that? You didn't have time to see it well in the shadows, but it looked ready to make a meal out of you instead. Better leave it alone. Most of the food is spoiled by now, if your nose is any indication, but you still scrounge up enough for a meal. It's better than nothing. @@text-align:center; @@",
+      "exits": {
+        "go on now": "corridor"
+      },
+      "items": []
+    },
+    "drinking_fountain": {
+      "name": "DRINKING FOUNTAIN",
+      "desc": "Halfway up the richly carved wall, water trickles out of a spigot, filling its basin with agonizing slowness. It's only large enough for two fistfuls of liquid, the excess leaving through an overflow drain. * * *",
+      "exits": {
+        "drink the water": "drink_the_water",
+        "wash your wounds": "wash_your_wounds",
+        "leave it alone": "leave_it_alone"
+      },
+      "items": []
+    },
+    "drink_the_water": {
+      "name": "DRINK THE WATER",
+      "desc": "The water is so cold it hurts. It hurts badly. Was it poisoned? On the other hand you suddenly remember with clarity all your spells. That will come in handy. But for now... @@text-align:center; @@",
+      "exits": {
+        "you are badly hurt": "you_are_badly_hurt",
+        "move on": "corridor"
+      },
+      "items": []
+    },
+    "wash_your_wounds": {
+      "name": "WASH YOUR WOUNDS",
+      "desc": "As the clear water passes over bruises and cuts, they appear to get smaller under your eyes. You feel better. As the clear water passes over unblemished skin, you feel your arms lighter. Quicker. Sharp. Truly a blessing. On the other hand, it feels as if the place is darker all of a sudden, and sounds get muffled. Monsters could be just behind the corner. @@text-align:center; @@",
+      "exits": {
+        "move on": "corridor",
+        "in fact...": "encounter!"
+      },
+      "items": []
+    },
+    "leave_it_alone": {
+      "name": "LEAVE IT ALONE",
+      "desc": "Who knows what kind of water flows through a place like this. Best not to touch it. You march on towards your goal instead. @@text-align:center; @@",
+      "exits": {
+        "move on": "corridor"
+      },
+      "items": []
+    },
+    "waiting_room": {
+      "name": "WAITING ROOM",
+      "desc": "A recessed portion of the corridor shelters a stone bench and two small braziers. Iron hooks overhead might have held a curtain or tapestry once. Now only abstract carvings cover the wall. * * *",
+      "exits": {
+        "eat and rest": "eat_and_rest",
+        "refresh your spells": "refresh_your_spells",
+        "just press onward": "just_press_onward"
+      },
+      "items": []
+    },
+    "eat_and_rest": {
+      "name": "EAT AND REST",
+      "desc": "You unpack some of the food from your bag and eat up, forgetting about danger for a few moments. It leaves you feeling much better. You rummage in your bag for something to eat, but in vain. Still, a little rest is better than nothing. @@text-align:center; @@",
+      "exits": {
+        "go on now": "corridor"
+      },
+      "items": []
+    },
+    "refresh_your_spells": {
+      "name": "REFRESH YOUR SPELLS",
+      "desc": "You sit back and try to think which of the spells you know could use a refresher. \\ \\ You recite the words for _spell.name to yourself. They burn bright in your thoughts. \\ You try to remember how to cast _spell.name, but can't seem to manage right now. \\ \\ @@text-align:center; @@ Unfortunately you can't seem to think of any. At least you wasted no time. @@text-align:center; @@",
+      "exits": {
+        "go on now": "corridor",
+        "choose again": "eat_and_rest"
+      },
+      "items": []
+    },
+    "just_press_onward": {
+      "name": "JUST PRESS ONWARD",
+      "desc": "Best not to dawdle in a place like this. Danger could catch up any moment. You march on towards your goal instead. @@text-align:center; @@",
+      "exits": {
+        "move on": "corridor"
+      },
+      "items": []
+    },
+    "challenge_completed": {
+      "name": "CHALLENGE COMPLETED",
+      "desc": "@@text-align:center; @@",
+      "exits": {
+        "you are badly hurt": "you_are_badly_hurt",
+        "you feel more capable": "you_feel_more_capable",
+        "move on": "respite"
+      },
+      "items": []
+    },
+    "clockwork_armor": {
+      "name": "CLOCKWORK ARMOR",
+      "desc": "An armored... something is ambling towards you in the grinding of gears, puffs of steam escaping from various joints now and then. It's big. And has whirling blades for hands. You will have to deal with it to continue, one way or another. (This is a d12 creature armed with a +6/+6 weapon.) * * *",
+      "exits": {
+        "attack": "attack_clockwork_armor",
+        "cast spell": "hex_clockwork_armor?",
+        "flee": "flee"
+      },
+      "items": []
+    },
+    "attack_clockwork_armor": {
+      "name": "ATTACK CLOCKWORK ARMOR",
+      "desc": "\\ \\ (You roll _you_roll against the opponent's _it_rolls.) \\ You watch the approaching monster carefully, weighing your options. A well-timed swing finds a weak point in the armor. It sags to the side, with a horrible grinding noise, and you run past without a second thought. @@text-align:center; @@ \\ You watch the approaching monster carefully, weighing your options. A well-timed swing connects with that huge breastplate. It rings hollow. @@text-align:center; @@ \\ You swing at the monster. Between its whirling blades and jerky motions, it fails to connect. And then it counter-attacks. You barely have time to see it coming before getting hit. @@text-align:center; @@ \\",
+      "exits": {
+        "you feel more capable": "you_feel_more_capable",
+        "move on": "search_the_place",
+        "you backpedal in a hurry": "clockwork_armor",
+        "you are badly hurt": "you_are_badly_hurt"
+      },
+      "items": []
+    },
+    "hex_clockwork_armor?": {
+      "name": "HEX CLOCKWORK ARMOR?",
+      "desc": "As the mechanical monstrosity approaches, you frantically wonder what sort of magic might be able to stop such a thing. @@text-align:center; / @@ Unfortunately, you draw a blank. @@text-align:center; @@",
+      "exits": {
+        "cast spell": "hex_clockwork_armor!",
+        "think again": "clockwork_armor",
+        "try something else": "clockwork_armor"
+      },
+      "items": []
+    },
+    "hex_clockwork_armor!": {
+      "name": "HEX CLOCKWORK ARMOR!",
+      "desc": "\\ As a cold wind picks up all around you, blowing snow at the walking suit of armor, the grinding of gears becomes more erratic, then ceases entirely. You shuffle past the deadly contraption, now frozen solid. @@text-align:center; @@ Strong vines sprout from the ground, pushing aside stones... grasping at the armored legs in their relentless march. They barely slow down the malefic machine, but that gives you enough time to get away. You unleash your magic, but the walking suit of armor appears unfazed. You dive to safety in the nick of time, taking a glancing blow in the process. @@text-align:center; @@",
+      "exits": {
+        "you feel more capable": "you_feel_more_capable",
+        "move on": "search_the_place",
+        "you are badly hurt": "you_are_badly_hurt",
+        "think again": "clockwork_armor"
+      },
+      "items": []
+    },
+    "giant_cockroaches": {
+      "name": "GIANT COCKROACHES",
+      "desc": "A shifting mass skitters down the corridor, shiny brown carapaces glinting. It's made of cockroaches the size of a shoe, climbing over each other to get ahead faster. Now and then, one stops and wriggles feelers in your direction. (This is a d4 creature armed with +2/+4 mandibles.) * * *",
+      "exits": {
+        "attack": "attack_giant_cockroaches",
+        "cast spell": "hex_giant_cockroaches?",
+        "flee": "flee"
+      },
+      "items": []
+    },
+    "attack_giant_cockroaches": {
+      "name": "ATTACK GIANT COCKROACHES",
+      "desc": "\\ \\ (You roll _you_roll against the opponent's _it_rolls.) \\ You launch into a deadly dance, kicking with your boots and swinging your weapon. Insects without number fall to your attacks. Many more remain, but faced with the onslaught, they scatter every which way. @@text-align:center; @@ \\ You hop around, stomping the ground with your boots. No luck hitting anything, but the cockroaches are too busy dodging to bite back. @@text-align:center; @@ \\ You stomp your boots all over the place, but the insects in front of you scuttle out of reach, while others come from behind to bite. It's all you can do not to get swarmed. @@text-align:center; @@ \\",
+      "exits": {
+        "you feel more capable": "you_feel_more_capable",
+        "move on": "search_the_place",
+        "you retreat to safety": "giant_cockroaches",
+        "you are badly hurt": "you_are_badly_hurt"
+      },
+      "items": []
+    },
+    "hex_giant_cockroaches?": {
+      "name": "HEX GIANT COCKROACHES?",
+      "desc": "As the insectoid horde approaches, you frantically wonder what sort of magic might be able to stop that many of them. @@text-align:center; / @@ Unfortunately, you draw a blank. @@text-align:center; @@",
+      "exits": {
+        "cast spell": "hex_cockroaches!",
+        "think again": "giant_cockroaches",
+        "try something else": "giant_cockroaches"
+      },
+      "items": []
+    },
+    "hex_cockroaches!": {
+      "name": "HEX COCKROACHES!",
+      "desc": "\\ At first nothing seems to happen, then you lift into the air and float away over the bulbous mass of chitin. A few daring insects lunge at you in passing, and it's all you can do to stay aloft, but you make it to safety. @@text-align:center; @@ As a cold wind picks up all around you, blowing snow over the bulbous mass of chitin, the insects' frenzied skittering grows sluggish. They still never stop coming, but that gives you enough time to get away. A tall flame bursts from the ground in front of you, then surges forward as if carried by a strong wind. Surviving insects scatter desperately every which way. You walk onward as lingering fires nibble at your heels. @@text-align:center; @@ You unleash your magic, but the endless parade of chitin appears unfazed. You scamper out of the way in the nick of time, getting bit in the process. @@text-align:center; @@",
+      "exits": {
+        "you feel more capable": "you_feel_more_capable",
+        "move on": "search_the_place",
+        "you are badly hurt": "you_are_badly_hurt",
+        "think again": "giant_cockroaches"
+      },
+      "items": []
+    },
+    "carnivorous_plants": {
+      "name": "CARNIVOROUS PLANTS",
+      "desc": "From ceramic pots on either side of the corridor grow two leafy plants as tall as you are. Instead of flowers, they sport a dozen hungry mouths. All turn towards the noise and vibration as you draw near. (This is a d6 creature armed with a +3/+6 weapon.) * * *",
+      "exits": {
+        "attack": "attack_carnivorous_plants",
+        "cast spell": "hex_carnivorous_plants?",
+        "flee": "flee"
+      },
+      "items": []
+    },
+    "attack_carnivorous_plants": {
+      "name": "ATTACK CARNIVOROUS PLANTS",
+      "desc": "\\ \\ (You roll _you_roll against the opponent's _it_rolls.) \\ The plants lash at you with thorny vines, but you parry each of them with ease. A well-timed swing, and one of the toothy flowers falls to the ground. Then another, and another. The plants shrivel under the onslaught. @@text-align:center; @@ \\ The plants lash at you with thorny vines, and it's all you can do to keep from being torn to shreds, let alone strike back. This will not be so easy. @@text-align:center; @@ \\ You swing at the plants, but they lash back with thorny vines that grasp and sting. Sooner or later, one of them finds its mark. @@text-align:center; @@ \\",
+      "exits": {
+        "you feel more capable": "you_feel_more_capable",
+        "move on": "search_the_place",
+        "you retreat to safety": "carnivorous_plants",
+        "you are badly hurt": "you_are_badly_hurt"
+      },
+      "items": []
+    },
+    "hex_carnivorous_plants?": {
+      "name": "HEX CARNIVOROUS PLANTS?",
+      "desc": "As the leafy beasts bar your way, you doubtfully wonder what sort of magic might be able to carry you past them. @@text-align:center; / @@ Unfortunately, you draw a blank. @@text-align:center; @@",
+      "exits": {
+        "cast spell": "hex_plants!",
+        "think again": "carnivorous_plants",
+        "try something else": "carnivorous_plants"
+      },
+      "items": []
+    },
+    "hex_plants!": {
+      "name": "HEX PLANTS!",
+      "desc": "\\ A tall flame bursts from the ground in front of you, then surges forward as if carried by a strong wind. The plants burn down in moments, writhing horribly. @@text-align:center; @@ As a cold wind picks up all around you, blowing snow over the murderous vines, their writhing grows sluggish. One still finds its mark as you run past. @@text-align:center; @@ Your own strong vines sprout from the ground, pushing aside stones... tangling with those barring the way forward. If anything, they are fraternizing. @@text-align:center; @@ You unleash your magic, but the chlorophilian creeps appear unfazed. At least they can't reach you to counter-attack. @@text-align:center; @@",
+      "exits": {
+        "you feel more capable": "you_feel_more_capable",
+        "move on": "search_the_place",
+        "you are badly hurt": "you_are_badly_hurt",
+        "think again": "carnivorous_plants"
+      },
+      "items": []
+    },
+    "living_shadows": {
+      "name": "LIVING SHADOWS",
+      "desc": "Deep shadows are dancing on the walls ahead of you, without a source of light that could cause it. Shadows with blood-red eyes and fangs. They peel off as you step closer and bar your way, floating in mid-air. (This is a d8 creature armed with a +4/+6 weapon.) * * *",
+      "exits": {
+        "attack": "attack_living_shadows",
+        "cast spell": "hex_living_shadows?",
+        "flee": "flee"
+      },
+      "items": []
+    },
+    "attack_living_shadows": {
+      "name": "ATTACK LIVING SHADOWS",
+      "desc": "\\ \\ (You roll _you_roll against the opponent's _it_rolls.) \\ You watch the approaching monsters carefully, weighing your options. A well-timed swing shears one of them in half, tatters of shadow soon melting away. The others scatter, and you run past without a second thought. @@text-align:center; @@ \\ You watch the approaching monsters carefully, weighing your options. A series of rapid swings meets nothing but air. At least it keeps them busy. @@text-align:center; @@ \\ You swing at the monsters, but they dance around confusingly. You hit nothing but air. Then they counter-attack, biting and slashing from all sides. @@text-align:center; @@ \\",
+      "exits": {
+        "you feel more capable": "you_feel_more_capable",
+        "move on": "search_the_place",
+        "you backpedal in a hurry": "living_shadows",
+        "you are badly hurt": "you_are_badly_hurt"
+      },
+      "items": []
+    },
+    "hex_living_shadows?": {
+      "name": "HEX LIVING SHADOWS?",
+      "desc": "As the creatures of darkness draw closer, you frantically wonder what sort of magic might be able to stop such things. @@text-align:center; / @@ Unfortunately, you draw a blank. @@text-align:center; @@",
+      "exits": {
+        "cast spell": "hex_living_shadows!",
+        "think again": "living_shadows",
+        "try something else": "living_shadows"
+      },
+      "items": []
+    },
+    "hex_living_shadows!": {
+      "name": "HEX LIVING SHADOWS!",
+      "desc": "\\ At first nothing seems to happen, then a strong wind picks up, and soon grows into a howling gale. The shadows are blown away with a vengeance. @@text-align:center; @@ A tall flame bursts from the ground in front of you, then surges forward as if carried by a strong wind. Light from the fire pushes the shadows flat against the walls. They promptly return, but you get enough time to escape. You unleash your magic, but the shadows dancing around you appear unfazed. You retreat out of the way in the nick of time, getting bit in the process. @@text-align:center; @@",
+      "exits": {
+        "you feel more capable": "you_feel_more_capable",
+        "move on": "search_the_place",
+        "you are badly hurt": "you_are_badly_hurt",
+        "think again": "living_shadows"
+      },
+      "items": []
+    },
+    "mass_of_tentacles": {
+      "name": "MASS OF TENTACLES",
+      "desc": "Writhing, wriggling tentacles are feeling their way along the corridor in your direction, squelching wetly. Lots and lots of them, bound together. If there's a body in the middle of it all, you couldn't say. (This is a d10 creature armed with +6/+4 suction cups.) * * *",
+      "exits": {
+        "attack": "attack_mass_of_tentacles",
+        "cast spell": "hex_mass_of_tentacles?",
+        "flee": "flee"
+      },
+      "items": []
+    },
+    "attack_mass_of_tentacles": {
+      "name": "ATTACK MASS OF TENTACLES",
+      "desc": "\\ \\ (You roll _you_roll against the opponent's _it_rolls.) \\ You watch the approaching monster carefully, weighing your options. A well-timed swing shears off a few tentacles. The rest of it curls up into a ball, writhing horribly, and you run past without a second thought. @@text-align:center; @@ \\ You watch the approaching monster carefully, weighing your options. Your swings are slapped out of the air by tentacles. At least it's a stalemate. @@text-align:center; @@ \\ You swing at the monster, but the confusing dance of tentacles makes you miss. And then it counter-attacks, slapping you around like a ragdoll. It hurts. @@text-align:center; @@ \\",
+      "exits": {
+        "you feel more capable": "you_feel_more_capable",
+        "move on": "search_the_place",
+        "think again": "mass_of_tentacles",
+        "you are badly hurt": "you_are_badly_hurt",
+        "you backpedal in a hurry": "mass_of_tentacles"
+      },
+      "items": []
+    },
+    "hex_mass_of_tentacles?": {
+      "name": "HEX MASS OF TENTACLES?",
+      "desc": "As the pile of flesh squirms closer, you frantically wonder what sort of magic might be able to stop such a thing. @@text-align:center; / @@ Unfortunately, you draw a blank. @@text-align:center; @@",
+      "exits": {
+        "cast spell": "hex_tentacles!",
+        "think again": "mass_of_tentacles",
+        "try something else": "mass_of_tentacles"
+      },
+      "items": []
+    },
+    "hex_tentacles!": {
+      "name": "HEX TENTACLES!",
+      "desc": "\\ Strong vines sprout from the ground, pushing aside stones, grasping at the writhing tentacles and pinning them down. You run past while you still can. @@text-align:center; @@ As the spell takes hold, you lift into the air and float away over the quivering pile of flesh. Tentacles whip through the air. You dodge, but still take a glancing blow before reaching safety. @@text-align:center; @@ You unleash your magic, but it just washes over the quivering flesh. You dive to safety in the nick of time, taking a glancing blow in the process. @@text-align:center; @@",
+      "exits": {
+        "you feel more capable": "you_feel_more_capable",
+        "move on": "search_the_place",
+        "you are badly hurt": "you_are_badly_hurt",
+        "think again": "living_shadows"
+      },
+      "items": []
+    },
+    "flee": {
+      "name": "FLEE",
+      "desc": "You'd rather not face such dangers right now. Best to retrace your steps, even at the cost of losing progress. There must be some other way forward. A safer one. @@text-align:center; @@",
+      "exits": {
+        "retreat, for now": "a_doorway_too_far"
+      },
+      "items": []
+    },
+    "portal": {
+      "name": "PORTAL",
+      "desc": "At the very top of the keep, ample stairs lead up to a round pool with linings of gold and marble. Inside it, a swirling vortex of light blurs glimpses of an unearthly place. It all seems dormant in the light coming in from windows under the ceiling only to bounce off the central dome. Across the room, a globe of many colors sits atop of a complicated pedestal with pistons encased in its base, that move tirelessly. The globe sparks and spins, sending waves of energy around the edge of the pool such that they appear to drive the vortex before gradually merging into it. Oval stones the size of a fist orbit the device protectively, fast enough to break bones if you tried to reach in. @@text-align:center; @@",
+      "exits": {
+        "there must be a way to get through": "break_the_device"
+      },
+      "items": []
+    },
+    "break_the_device": {
+      "name": "BREAK THE DEVICE",
+      "desc": "Well, you can't make an omelette without breaking some eggs, and that globe looks to be the most breakable thing here. The only question is how. * * *",
+      "exits": {
+        "just smash it": "just_smash_it",
+        "use your magic": "use_your_magic",
+        "examine the room": "portal"
+      },
+      "items": []
+    },
+    "just_smash_it": {
+      "name": "JUST SMASH IT",
+      "desc": "You watch the orbiting stones carefully, bracing yourself for a well-timed swing that would reach past them at your target. (You roll _you_roll against a target of 16.) \\ Many defenses now removed, your swing connects. With a deep thumping sound that makes you sick to the stomach, the globe collapses into nothingness, taking with it the tip of your weapon and half the pedestal it's sitting on. @@text-align:center; @@ And... it connects! One of the stones is knocked out of its orbit and flies off to crash in a corner. A few more to go. @@text-align:center; @@ Unfortunately you mistime it ever so slightly, and your blow is just barely deflected. You take a step back. @@text-align:center; @@ Unfortunately you misjudge the timing. Not only your blow is deflected, but one of the stones hits you on the rebound. @@text-align:center; @@",
+      "exits": {
+        "a moment passes": "epilogue",
+        "try again": "break_the_device",
+        "you are badly hurt": "you_are_badly_hurt"
+      },
+      "items": []
+    },
+    "use_your_magic": {
+      "name": "USE YOUR MAGIC",
+      "desc": "You watch the orbiting stones carefully, wondering what magic could possibly reach past them and strike your target. @@text-align:center; / @@ Unfortunately, you draw a blank. @@text-align:center; @@",
+      "exits": {
+        "cast spell": "hex_the_device",
+        "think again": "break_the_device",
+        "try something else": "break_the_device"
+      },
+      "items": []
+    },
+    "hex_the_device": {
+      "name": "HEX THE DEVICE",
+      "desc": "\\ At first nothing seems to happen, then a strong wind picks up, and soon grows into a howling gale. One of the orbiting stones puts up a shimmering barrier, and it's blown across the room as a result. It doesn't come back. As a cold wind picks up all around you, blowing snow at the orbiting stones, those caught in its path lose speed, weighted down with frost. One falls to the ground and rolls out of the way into a corner. The rest endure somehow. A tall flame bursts from the ground in front of you, then surges forward as if carried by a strong wind. One stone, caught right in the middle, begins to melt, turning into a shapeless lump that can't seem to stay aloft anymore. Strong vines sprout from the floor, pushing aside marble tiles... reaching for the orbiting stones. One of the latter gets caught in the green net and dragged down, despite the others fighting back with crushing blows. At first nothing seems to happen, then you lift into the air and float straight across the pool at the sphere. The orbiting stones angle upwards clumsily; you easily strike one out of the air before having to back down. \\ Many defenses now removed, your hit the sphere. With a deep thumping sound that makes you sick to the stomach, the globe collapses into nothingness, taking with it the tip of your weapon and half the pedestal it's sitting on. @@text-align:center; @@ @@text-align:center; @@",
+      "exits": {
+        "a moment passes": "epilogue",
+        "redouble your efforts": "break_the_device"
+      },
+      "items": []
+    },
+    "epilogue": {
+      "name": "EPILOGUE",
+      "desc": "As you watch, the vortex in the pool slows down, then fades away, leaving only clear water in its place. It still seems to go very deep indeed. That's not all, either. You can see more clearly now. Hear more clearly. It's all still, and quiet. Too much so. By the time you find the strength to head back outside, the keep has stopped shifting, reduced to a sad old pile of masonry. Maybe something can be done about that, too. But it's not the kind of problem a hero can fix alone. @@text-align:center; ''The End'' @@",
+      "exits": {},
+      "items": []
+    }
+  }
+}

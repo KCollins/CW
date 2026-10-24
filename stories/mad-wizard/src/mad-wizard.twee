@@ -1,0 +1,286 @@
+:: Start [meta]
+
+After much bitter fighting, the mad wizard was defeated and banished to distant shores. But the land is not yet at peace. Every night, terrible things ride forth from the wizard's former home, tormenting peasant and noble alike.
+
+Many have entered the keep of the mad wizard to find and seal away the source of evil. The few who returned at all describe an ever-shifting maze of treachery and danger. Still, what else to do than try again. And it's your turn.
+
+@@text-align:center;
+[[Go forth, hero -> Character creation]]
+@@
+
+:: StoryBanner
+
+No Time To Play, 2019
+
+:: StoryTitle
+
+Keep of the Mad Wizard
+
+:: StorySubtitle
+
+a jumbled gamebook
+
+:: StoryAuthor
+
+Felix Pleşoianu
+
+:: StoryMenu
+
+[[Credits]]
+[[Help]]
+[[License]]
+
+:: StorySettings
+
+ifid:75b44825-9d9f-418c-8990-7ccbb75e8686
+
+:: Credits [meta]
+
+@@text-align:center;
+''Keep of the Mad Wizard''
+
+A 2019 game by [[No Time To Play -> https://notimetoplay.org/]].
+
+Made with [[Tweego -> http://www.motoslave.net/tweego/]] and [[Sugarcube 2 -> http://www.motoslave.net/sugarcube/2/]].
+
+Font: [[NovaCut -> https://fontlibrary.org/en/font/nova]],
+courtesy of the Open Font Library.
+
+<<back "resume play">>
+@@
+
+:: Help [meta]
+
+//Keep of the Mad Wizard// uses the [[Battles & Balances -> https://notimetoplay.itch.io/battles-and-balances]] rules. You don't have to know them, the game will roll dice for you as needed. Some details however may be less obvious:
+
+* Your goal is to gather 100 points of progress and trigger the endgame. Mostly you do that by overcoming monsters and obstacles.
+* Exploring uses up energy. When you're tired, wandering monsters catch up with you, and then you have a fight on your hands.
+* You can run away from a fight (or an obstacle), but you're going to lose progress.
+* Lose enough progress and you'll end up running out of the keep altogether, ending the game.
+* The one other way to lose is to end up with more wounds than health.
+
+Hope this helps. Have fun!
+
+@@text-align:center;
+<<back "resume play">>
+@@
+
+:: License [meta]
+
+//Keep of the Mad Wizard// is free and open source software under the [[Artistic License 2.0->https://opensource.org/licenses/Artistic-2.0]]; a copy is included in the source package (where available). Unless you plan to modify or distribute the game, don't worry about it.
+
+The NovaCut font is provided under the SIL Open Font License. You only need to mind that if you extract the font file from the game for other uses.
+
+@@text-align:center;
+<<back "resume play">>
+@@
+
+:: Character creation [meta]
+
+As the dark fortress looms ahead of you, you reflect on life until this point.
+
+<label>What's your name?
+<<textbox "$player_name" "Hero" autofocus>></label>
+
+What do you bring to this battle?
+
+<label><<radiobutton "$player_class" "fighter" checked>> My steel and determination!</label>
+<label><<radiobutton "$player_class" "rogue">> Quick wits and nimble limbs!</label>
+<label><<radiobutton "$player_class" "mage">> The light of knowledge!
+</label>
+
+@@text-align:center;
+[[Go on->Backstory]]
+@@
+
+:: Backstory [meta]
+
+<<set $player = create_character($player_name, 8)>>\
+
+''<<=$player_name>> the <<=$player_class>>''
+
+<<switch $player_class>>
+ <<case "fighter">><<run equip_character($player, "fighter")>>\
+  When evil threatens the well-being of honest, hard working people, you are there to set things right. Brawn and blade are the tools of your trade, that you wield bravely, yet fairly. But will they be enough where better people have failed? Only one way to find out.
+
+  (Muscle +1, Stamina +1)<<set $player.muscle += 1>><<set $player.stamina += 1>>
+ <<case "rogue">><<run equip_character($player, "rogue")>>\
+  Sometimes the fastest path to the core of things is all the way around. You were never one to follow the rules anyway. What looks right all too often depends on where you stand. Well, except for that place. That looks wrong no matter what. So you'll help... your way.
+
+  (Agility +1, Speed +1)<<set $player.agility += 1>><<set $player.speed += 1>>
+ <<case "mage">><<run equip_character($player, "mage")>>\
+  One can't fight fire with fire, but who else can figure out how magic can turn out so wrong than another master of the art? Your arcane skills have served you well so far. They should help you get to the bottom of this, too. Maybe people will trust you more then.
+
+  (Focus +2)<<set $player.focus += 2>>
+<</switch>>\
+
+<<set $player.energy = $player.speed * $player.size>>\
+
+@@text-align:center;
+[[Yes, that was it->Title page]] / <<back "No, choose again">>
+@@
+
+:: Title page [meta]
+
+@@text-align:center;
+!<<=Story.title>>
+
+<<include "StorySubtitle">>
+by
+
+''<<include "StoryAuthor">>''
+
+<<link [[Turn the page -> Prologue]]>><<set $story_progress to 0>><</link>>
+@@
+
+:: Prologue [meta]
+
+Royal troops are milling about the conquered castle's courtyard, their job mostly to prevent people and animals from wandering into the keep by mistake. It's not in their power to stop the flying nightmares jumping off its rooftop after sunset, so at those times they hide with everyone else.
+
+In broad daylight, the keep seems perpetually covered by clouds, even when no trace of one can be seen overhead. Otherwise there's no sign of life from within. Yet the mad wizard's power lives on.
+
+The broken doors creak a death song as you walk inside. Soon they remain behind. It's just you and the keep now.
+
+@@text-align:center;
+[[Begin your journey -> Corridor]]
+@@
+
+:: PassageHeader [nobr]
+
+<<if !tags().contains("meta")>>
+<div class="header">
+<span class="left">Progress <<=$story_progress>></span>
+Health <<= $player.stamina * $player.size - $player.wounds>>
+<span class="right">Energy <<=$player.energy>></span>
+</div>
+<</if>>
+
+:: PassageFooter
+
+<<if !tags().contains("meta")>>
+@@text-align:center;Margin-top: 2em;
+<<nobr>>
+<<button "Stats">><<script>>
+	Dialog.setup("Charsheet");
+	Dialog.wiki(Story.get("Charsheet").processText());
+	Dialog.open();
+<</script>><</button>>
+<<button "Stuff">><<script>>
+	Dialog.setup("Inventory");
+	Dialog.wiki(Story.get("Inventory").processText());
+	Dialog.open();
+<</script>><</button>>
+<<button "Spells">><<script>>
+	Dialog.setup("Spellbook");
+	Dialog.wiki(Story.get("Spellbook").processText());
+	Dialog.open();
+<</script>><</button>>
+<</nobr>>
+@@
+<</if>>
+
+:: Charsheet [meta]
+
+@@text-align:center;
+!! $player_name the $player_class
+@@\
+
+<<for _attr range all_buffs>>\
+* <<= _attr.toUpperFirst()>>: $player[_attr] <<if $player.buffs[_attr] > 0>>(+1)<</if>>
+<</for>>\
+
+@@text-align:center;
+Size: d$player.size
+Wounds: $player.wounds / <<=$player.stamina * $player.size>>
+Blessings: $player.blessings Experience: $player.experience
+
+<<button "close">><<run Dialog.close()>><</button>>
+@@
+
+:: Inventory [meta]
+
+@@text-align:center;
+''You are carrying''
+@@
+
+Rations: $player.inventory.rations
+<<for _potion, _count range $player.inventory.potions>>\
+<<if _count > 0>>\
+* Potion of _potion x<<=_count>>
+<</if>>\
+<</for>>\
+Weapon: $player.weapon.name (+$player.weapon.attack / +$player.weapon.damage)
+Armor: $player.armor.name (+$player.armor.protection)
+
+@@text-align:center;
+<<button "close">><<run Dialog.close()>><</button>>
+@@
+
+:: Spellbook [meta]
+
+@@text-align:center;
+''Spells you have''
+@@
+
+<<for _spell, _data range $player.spellbook>>\
+* _spell (level _data.level) x<<=_data.charges>>
+<</for>>\
+
+@@text-align:center;
+<<button "close">><<run Dialog.close()>><</button>>
+@@
+
+:: Choose spell [meta]
+
+<<set $spell_count to 0>>\
+<<for _spell, _data range $player.spellbook>>\
+<<if _data.charges > 0>>\
+<label><<radiobutton "$chosen_spell" _spell checked>> _spell</label><<set $spell_count += 1>>
+<</if>>\
+<</for>>\
+
+:: Choose potion [meta]
+
+<<set $potion_count to 0>>\
+<<for _potion, _turns range $player.inventory.potions>>\
+<<if _turns > 0>>\
+<label><<radiobutton "$chosen_potion" _potion checked>> _potion</label><<set $potion_count += 1>>
+<</if>>\
+<</for>>\
+
+:: You feel more capable
+
+With all the recent exertions, your abilities have been growing. Upcoming challenges should be that much easier to deal with. But in what area?
+
+<label><<radiobutton "$chosen_ability" "muscle" checked>> Muscle</label>
+<label><<radiobutton "$chosen_ability" "stamina">> Stamina</label>
+<label><<radiobutton "$chosen_ability" "agility">> Agility</label>
+<label><<radiobutton "$chosen_ability" "speed">> Speed</label>
+<label><<radiobutton "$chosen_ability" "focus">> Focus</label>
+
+@@text-align:center;
+<<link "Go on now" $continue_to>>
+ <<set $player[$chosen_ability] += 1>>
+ <<set $player.experience -= 1000>>
+<</link>>
+@@
+
+:: You are badly hurt
+
+As you bleed from one wound too many, a loud buzzing fills your ears, and everything goes dark. The fall that follows feels long indeed.
+
+You wake up much later, in what turns out to be a healer's hut. And the keep is still back there, its evil intact. Waiting. Taunting.
+
+One day you'll be given another chance. But maybe after some rest.
+
+@@text-align:center;
+''The End?''
+@@
+
+:: A doorway too far
+
+Bright light shines from somewhere up ahead as you try to put more distance between yourself and that... that... You run towards the opening only to find yourself outside, in the sun, among overgrown vegetation. Behind you, the stone wall of the keep is blank and smooth. You return the long way around, to join the ranks of those who would have another chance, if deemed worthy.
+
+@@text-align:center;
+''The End?''
+@@

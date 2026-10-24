@@ -1,0 +1,111 @@
+:: Portal [room]
+
+At the very top of the keep, ample stairs lead up to a round pool with linings of gold and marble. Inside it, a swirling vortex of light blurs glimpses of an unearthly place. It all seems dormant in the light coming in from windows under the ceiling only to bounce off the central dome.
+
+Across the room, a globe of many colors sits atop of a complicated pedestal with pistons encased in its base, that move tirelessly. The globe sparks and spins, sending waves of energy around the edge of the pool such that they appear to drive the vortex before gradually merging into it. Oval stones the size of a fist orbit the device protectively, fast enough to break bones if you tried to reach in.
+
+@@text-align:center;
+ [[There must be a way to get through -> Break the device]]
+@@
+
+:: Break the device
+
+Well, you can't make an omelette without breaking some eggs, and that globe looks to be the most breakable thing here. The only question is how.
+
+* [[Just smash it]]
+* [[Use your magic]]
+* [[Examine the room -> Portal]]
+
+:: Just smash it
+
+You watch the orbiting stones carefully, bracing yourself for a well-timed swing that would reach past them at your target.
+
+<<set _you_roll to roll_attack($player, all_monsters["shadows"])>>(You roll _you_roll against a target of 16.)
+
+<<if _you_roll > 16>>
+ <<set $story_progress += roll_dice(2, 6, +3)>>\
+ <<if $story_progress >= 50>>
+  Many defenses now removed, your swing connects. With a deep thumping sound that makes you sick to the stomach, the globe collapses into nothingness, taking with it the tip of your weapon and half the pedestal it's sitting on.
+
+@@text-align:center;
+  [[A moment passes -> Epilogue]]
+@@
+ <<else>>
+  And... it connects! One of the stones is knocked out of its orbit and flies off to crash in a corner. A few more to go.
+
+@@text-align:center;
+  [[Try again -> Break the device]]
+@@
+ <</if>>
+<<elseif _you_roll == 16>>
+ Unfortunately you mistime it ever so slightly, and your blow is just barely deflected. You take a step back.
+
+@@text-align:center;
+ [[Try again -> Break the device]]
+@@
+<<else>>
+ <<set $player.blessings += 1>>Unfortunately you misjudge the timing. Not only your blow is deflected, but one of the stones hits you on the rebound.<<set $player.wounds += roll_dice(1, 4, +1)>>
+
+@@text-align:center;
+<<if $player.wounds >= $player.stamina * $player.size>>
+ [[You are badly hurt]]
+<<else>>
+ [[Try again -> Break the device]]
+<</if>>
+@@
+<</if>>
+
+:: Use your magic
+
+You watch the orbiting stones carefully, wondering what magic could possibly reach past them and strike your target.
+
+<<include "Choose spell">>
+
+<<if $spell_count > 0>>
+@@text-align:center;
+ [[Cast spell -> Hex the device]] / [[Think again -> Break the device]]
+@@
+<<else>>
+Unfortunately, you draw a blank.
+
+@@text-align:center;
+ [[Try something else -> Break the device]]
+@@
+<</if>>
+
+:: Hex the device
+
+<<set $player.spellbook[$chosen_spell].charges -= 1>>\
+
+<<switch $chosen_spell>>
+ <<case "Windstorm">>At first nothing seems to happen, then a strong wind picks up, and soon grows into a howling gale. One of the orbiting stones puts up a shimmering barrier, and it's blown across the room as a result. It doesn't come back.
+ <<case "Snowdrift">>As a cold wind picks up all around you, blowing snow at the orbiting stones, those caught in its path lose speed, weighted down with frost. One falls to the ground and rolls out of the way into a corner. The rest endure somehow.
+ <<case "Flamestrike">>A tall flame bursts from the ground in front of you, then surges forward as if carried by a strong wind. One stone, caught right in the middle, begins to melt, turning into a shapeless lump that can't seem to stay aloft anymore.
+ <<case "Undergrowth">>Strong vines sprout from the floor, pushing aside marble tiles... reaching for the orbiting stones. One of the latter gets caught in the green net and dragged down, despite the others fighting back with crushing blows.
+ <<case "Levitation">>At first nothing seems to happen, then you lift into the air and float straight across the pool at the sphere. The orbiting stones angle upwards clumsily; you easily strike one out of the air before having to back down.
+<</switch>>
+
+<<set $story_progress += roll_dice(2, 6, +3)>>\
+<<if $story_progress >= 50>>
+ Many defenses now removed, your hit the sphere. With a deep thumping sound that makes you sick to the stomach, the globe collapses into nothingness, taking with it the tip of your weapon and half the pedestal it's sitting on.
+
+@@text-align:center;
+  [[A moment passes -> Epilogue]]
+@@
+<<else>>
+@@text-align:center;
+  [[Redouble your efforts -> Break the device]]
+@@
+<</if>>
+
+:: Epilogue
+
+As you watch, the vortex in the pool slows down, then fades away, leaving only clear water in its place. It still seems to go very deep indeed.
+
+That's not all, either. You can see more clearly now. Hear more clearly. It's all still, and quiet. Too much so.
+
+By the time you find the strength to head back outside, the keep has stopped shifting, reduced to a sad old pile of masonry. Maybe something can be done about that, too. But it's not the kind of problem a hero can fix alone.
+
+@@text-align:center;
+''The End''
+@@
