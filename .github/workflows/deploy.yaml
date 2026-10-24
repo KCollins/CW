@@ -1,4 +1,4 @@
-name: Build and Deploy CW Adventure
+name: Build Stories and Deploy GitHub Pages
 
 on:
   push:
@@ -11,22 +11,50 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Generate Games Catalog JSON
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Convert Twee Stories to JSON
+        run: |
+          mkdir -p games
+          if [ -d "stories" ]; then
+            for story_dir in stories/*/; do
+              if [ -d "$story_dir" ]; then
+                folder_name=$(basename "$story_dir")
+                echo "Processing story: $folder_name"
+                python3 scripts/convert_twee.py "$story_dir" "games/${folder_name}.json"
+              fi
+            done
+          fi
+
+      - name: Generate Game Catalog Manifest
         run: |
           python3 -c "
           import os, json
-          games = []
-          for f in os.listdir('games'):
-              if f.endswith('.json') and f != 'catalog.json':
-                  with open(os.path.join('games', f)) as gf:
-                      data = json.load(gf)
-                      games.append({'id': f, 'title': data.get('title', f), 'author': data.get('author', 'Unknown')})
-          with open('games/catalog.json', 'w') as cat:
-              json.dump(games, cat, indent=2)
-          print('Generated catalog with', len(games), 'games.')
+          catalog = []
+          if os.path.exists('games'):
+              for f in os.listdir('games'):
+                  if f.endswith('.json') and f != 'catalog.json':
+                      path = os.path.join('games', f)
+                      try:
+                          with open(path, 'r', encoding='utf-8') as gf:
+                              data = json.load(gf)
+                              catalog.append({
+                                  'id': f,
+                                  'title': data.get('title', f),
+                                  'author': data.get('author', 'Unknown')
+                              })
+                      except Exception as e:
+                          print(f'Error reading {f}: {e}')
+          
+          with open('games/catalog.json', 'w', encoding='utf-8') as cat:
+              json.dump(catalog, cat, indent=2)
+          print('Generated games/catalog.json with', len(catalog), 'entry/entries.')
           "
 
       - name: Deploy to GitHub Pages
