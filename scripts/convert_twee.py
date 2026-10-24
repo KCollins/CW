@@ -3,69 +3,92 @@ import re
 import json
 import sys
 
-def parse_twee_directory(story_dir, title="Keep of the Mad Wizard", author="Felix Pleșoianu"):
+def parse_story_directory(story_dir, title="Keep of the Mad Wizard", author="Felix Pleșoianu"):
     rooms = {}
     start_room = None
 
-    # Recursively find all .twee files in the story folder
-    twee_files = []
+    # Recursively find all Twee/Twine source or HTML files
+    matching_files = []
+    valid_exts = ('.twee', '.tw', '.twee2', '.txt', '.html', '.htm')
+    
     for root, _, files in os.walk(story_dir):
         for file in files:
-            if file.endswith('.twee') or file.endswith('.tw'):
-                twee_files.append(os.path.join(root, file))
+            if file.lower().endswith(valid_exts):
+                matching_files.append(os.path.join(root, file))
 
-    if not twee_files:
-        raise FileNotFoundError(f"No .twee files found in directory {story_dir}")
+    if not matching_files:
+        print(f"Warning: No matching story files found in {story_dir}")
+        return None
 
-    for filepath in twee_files:
+    for filepath in matching_files:
         with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
             content = f.read()
 
-        # Split passage headers (:: PassageName [tags])
-        raw_passages = re.split(r'\n::\s*', '\n' + content)
-        
-        for passage in raw_passages:
-            if not passage.strip():
-                continue
-            
-            lines = passage.strip().split('\n')
-            header = lines[0].strip()
-            
-            # Extract passage name (ignore tags like [nogoto])
-            passage_name = header.split('[')[0].strip()
-            room_id = passage_name.lower().replace(' ', '_')
-
-            # Identify start room (defaulting to 'Start' or 'StoryTitle' setup)
-            if passage_name.lower() in ['start', 'storytitle', 'main'] and not start_room:
-                start_room = room_id
-
-            body = '\n'.join(lines[1:])
-            exits = {}
-
-            # Extract links: [[Text->Target]], [[Text|Target]], or [[Target]]
-            link_pattern = r'\[\[(?:([^\]\|]+)(?:->|\|))?([^\]\|]+)\]\]'
-            for match in re.finditer(link_pattern, body):
-                label = match.group(1) or match.group(2)
-                target = match.group(2).strip().lower().replace(' ', '_')
+        # Check if file is a compiled Twine HTML export (<tw-passagedata>)
+        if '<tw-passagedata' in content.lower():
+            passage_matches = re.findall(r'<tw-passagedata[^>]*name=["\']([^"\']+)["\'][^>]*>(.*?)</tw-passagedata>', content, re.DOTALL | re.IGNORECASE)
+            for name, body in passage_matches:
+                room_id = name.lower().strip().replace(' ', '_')
+                if not start_room and room_id not in ['storytitle', 'storysettings']:
+                    start_room = room_id
                 
-                cmd = label.strip().lower()
-                exits[cmd] = target
+                exits = {}
+                link_pattern = r'\[\[(?:([^\]\|]+)(?:->|\|))?([^\]\|]+)\]\]'
+                for match in re.finditer(link_pattern, body):
+                    label = match.group(1) or match.group(2)
+                    target = match.group(2).strip().lower().replace(' ', '_')
+                    exits[label.strip().lower()] = target
 
-            # Clean Twine/SugarCube macros (e.g. <<set ...>>, <<if ...>>, <<include ...>>)
-            clean_desc = re.sub(r'<<.*?>>', '', body)
-            clean_desc = re.sub(r'\[\[.*?\]\]', '', clean_desc)
-            clean_desc = re.sub(r'\s+', ' ', clean_desc).strip()
+                clean_desc = re.sub(r'<[^>]+>', '', body)
+                clean_desc = re.sub(r'\[\[.*?\]\]', '', clean_desc)
+                clean_desc = re.sub(r'\s+', ' ', clean_desc).strip()
 
-            if clean_desc or exits:
                 rooms[room_id] = {
-                    "name": passage_name.upper(),
+                    "name": name.upper(),
                     "desc": clean_desc,
                     "exits": exits,
                     "items": []
                 }
+        else:
+            # Standard Twee format (:: PassageName)
+            raw_passages = re.split(r'\n::\s*', '\n' + content)
+            for passage in raw_passages:
+                if not passage.strip():
+                    continue
+                
+                lines = passage.strip().split('\n')
+                header = lines[0].strip()
+                passage_name = header.split('[')[0].strip()
+                room_id = passage_name.lower().replace(' ', '_')
 
-    # Fallback start room if no 'Start' passage header existed
-    first_room = list(rooms.keys())[0] if rooms else "start"
+                if passage_name.lower() in ['start', 'storytitle', 'main'] and not start_room:
+                    start_room = room_id
+
+                body = '\n'.join(lines[1:])
+                exits = {}
+
+                link_pattern = r'\[\[(?:([^\]\|]+)(?:->|\|))?([^\]\|]+)\]\]'
+                for match in re.finditer(link_pattern, body):
+                    label = match.group(1) or match.group(2)
+                    target = match.group(2).strip().lower().replace(' ', '_')
+                    exits[label.strip().lower()] = target
+
+                clean_desc = re.sub(r'<<.*?>>', '', body)
+                clean_desc = re.sub(r'\[\[.*?\]\]', '', clean_desc)
+                clean_desc = re.sub(r'\s+', ' ', clean_desc).strip()
+
+                if clean_desc or exits:
+                    rooms[room_id] = {
+                        "name": passage_name.upper(),
+                        "desc": clean_desc,
+                        "exits": exits,
+                        "items": []
+                    }
+
+    if not rooms:
+        return None
+
+    first_room = list(rooms.keys())[0]
 
     return {
         "title": title,
@@ -82,10 +105,12 @@ if __name__ == "__main__":
     input_dir = sys.argv[1]
     output_file = sys.argv[2]
 
-    story_data = parse_twee_directory(input_dir)
-    
-    os.makedirs(os.path.dirname(output_file), exist_ok=True)
-    with open(output_file, 'w', encoding='utf-8') as f:
-        json.dump(story_data, f, indent=2)
-
-    print(f"Successfully converted {input_dir} -> {output_file}")
+    story_data = parse_story_directory(input_dir)
+    if story_data:
+        os.makedirs(os.path.dirname(output_file), exist_ok=True)
+        with open(output_file, 'w', encoding='utf-8') as f:
+            json.dump(story_data, f, indent=2)
+        print(f"Successfully converted {input_dir} -> {output_file}")
+    else:
+        print(f"Error: Could not convert story in {input_dir}")
+        sys.exit(1)
