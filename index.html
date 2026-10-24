@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colossal CW Adventure - Retro Morse Code Text Adventure</title>
+    <!-- Tailwind CSS for layout utilities -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* CSS Custom Properties for Authentic CRT Phosphor Color Palettes */
+        :root {
+            --bg-color: #030d06;
+            --term-bg: #020804;
+            --text-color: #33ff33;
+            --text-dim: #1a991a;
+            --glow-color: rgba(51, 255, 51, 0.65);
+            --border-color: #145e14;
+            --active-bg: #33ff33;
+            --active-text: #020804;
+        }
+
+        .theme-p1-green {
+            --bg-color: #030d06;
+            --term-bg: #020804;
+            --text-color: #33ff33;
+            --text-dim: #1a991a;
+            --glow-color: rgba(51, 255, 51, 0.65);
+            --border-color: #145e14;
+            --active-bg: #33ff33;
+            --active-text: #020804;
+        }
+
+        .theme-p3-amber {
+            --bg-color: #140800;
+            --term-bg: #0a0400;
+            --text-color: #ffb000;
+            --text-dim: #996a00;
+            --glow-color: rgba(255, 176, 0, 0.65);
+            --border-color: #593e00;
+            --active-bg: #ffb000;
+            --active-text: #0a0400;
+        }
+
+        .theme-mono-white {
+            --bg-color: #0d0d0d;
+            --term-bg: #050505;
+            --text-color: #f0f0f0;
+            --text-dim: #777777;
+            --glow-color: rgba(240, 240, 240, 0.5);
+            --border-color: #444444;
+            --active-bg: #ffffff;
+            --active-text: #000000;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Courier New', Courier, monospace;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* CRT Screen & Scanline Effect */
+        .crt-container {
+            position: relative;
+            background-color: var(--term-bg);
+            border: 2px solid var(--border-color);
+            box-shadow: inset 0 0 18px rgba(0,0,0,0.95), 0 0 12px var(--glow-color);
+            overflow: hidden;
+        }
+
+        .crt-container::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 10;
+            background-size: 100% 3px, 6px 100%;
+            pointer-events: none;
+            opacity: 0.75;
+        }
+
+        /* CRT Text Glow */
+        .crt-text {
+            text-shadow: 0 0 5px var(--glow-color);
+        }
+
+        /* Real-Time Transmitting Character Highlight */
+        .cw-active-char {
+            background-color: var(--active-bg) !important;
+            color: var(--active-text) !important;
+            font-weight: bold;
+            box-shadow: 0 0 10px var(--glow-color);
+            padding: 0 2px;
+            display: inline-block;
+            transform: scale(1.08);
+        }
+
+        /* Custom CRT Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--term-bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 2px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-color);
+        }
+
+        /* Retro Button Styling (Strictly No Emojis) */
+        .retro-btn {
+            background-color: rgba(0, 0, 0, 0.6);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            transition: all 0.15s ease;
+        }
+        .retro-btn:hover {
+            background-color: var(--border-color);
+            color: var(--text-color);
+            box-shadow: 0 0 8px var(--glow-color);
+        }
+        .retro-btn:active {
+            background-color: var(--text-color);
+            color: var(--term-bg);
+        }
+
+        .retro-btn-active {
+            background-color: var(--border-color) !important;
+            border-color: var(--text-color) !important;
+            box-shadow: 0 0 8px var(--glow-color);
+        }
+
+        /* Straight Key Visual Press Feedback */
+        .key-active {
+            background-color: var(--text-color) !important;
+            color: var(--term-bg) !important;
+            box-shadow: 0 0 15px var(--glow-color);
+        }
+    </style>
+</head>
+<body class="theme-p1-green min-h-screen flex flex-col justify-between p-2 md:p-5 transition-colors duration-300 select-none">
+
+    <!-- TOP HEADER CONTROL PANEL -->
+    <header class="max-w-6xl w-full mx-auto mb-3 bg-black/50 p-3.5 rounded-lg border border-[var(--border-color)]">
+        <div class="flex flex-col lg:flex-row justify-between items-center gap-3 border-b border-[var(--border-color)] pb-3 mb-3">
+            <div>
+                <h1 class="text-lg md:text-xl font-bold tracking-widest crt-text uppercase">COLOSSAL CW ADVENTURE [RADIO TERMINAL]</h1>
+                <p class="text-xs text-[var(--text-dim)]">Interactive Morse Code Skill Trainer & Text Adventure</p>
+            </div>
+
+            <!-- Global Toggles & Theme Selector -->
+            <div class="flex flex-wrap items-center gap-2 text-xs">
+                <!-- Theme Buttons -->
+                <div class="flex items-center gap-1 bg-black/70 p-1 rounded border border-[var(--border-color)]">
+                    <span class="text-[var(--text-dim)] font-bold px-1">COLOR:</span>
+                    <button onclick="setTheme('theme-p1-green')" class="px-2 py-0.5 rounded retro-btn font-bold">P1 GREEN</button>
+                    <button onclick="setTheme('theme-p3-amber')" class="px-2 py-0.5 rounded retro-btn font-bold">P3 AMBER</button>
+                    <button onclick="setTheme('theme-mono-white')" class="px-2 py-0.5 rounded retro-btn font-bold">WHITE</button>
+                </div>
+
+                <!-- Highlight Toggle -->
+                <button id="highlight-btn" onclick="toggleHighlighting()" class="px-3 py-1 rounded retro-btn retro-btn-active font-bold">
+                    HIGHLIGHT: [ON]
+                </button>
+
+                <!-- Audio Mute Toggle -->
+                <button id="mute-btn" onclick="toggleMute()" class="px-3 py-1 rounded retro-btn font-bold">
+                    AUDIO: [ON]
+                </button>
+            </div>
+        </div>
+
+        <!-- Audio Synth & Pedagogical Settings -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+            <!-- Target Speed (WPM) -->
+            <div>
+                <div class="flex justify-between mb-1 font-bold">
+                    <span>TARGET SPEED:</span>
+                    <span id="wpm-val">18 WPM</span>
+                </div>
+                <input type="range" id="wpm-slider" min="15" max="30" value="18" class="w-full accent-[var(--text-color)] cursor-pointer" oninput="updateSpeedSettings()">
+            </div>
+
+            <!-- Farnsworth Speed -->
+            <div>
+                <div class="flex justify-between mb-1 font-bold">
+                    <span>FARNSWORTH:</span>
+                    <span id="farnsworth-val">10 WPM</span>
+                </div>
+                <input type="range" id="farnsworth-slider" min="5" max="20" value="10" class="w-full accent-[var(--text-color)] cursor-pointer" oninput="updateSpeedSettings()">
+            </div>
+
+            <!-- Tone Pitch -->
+            <div>
+                <div class="flex justify-between mb-1 font-bold">
+                    <span>TONE PITCH:</span>
+                    <span id="freq-val">600 Hz</span>
+                </div>
+                <input type="range" id="freq-slider" min="400" max="800" value="600" step="25" class="w-full accent-[var(--text-color)] cursor-pointer" oninput="updateAudioSettings()">
+            </div>
+
+            <!-- Learning Mode Selector -->
+            <div>
+                <div class="mb-1 font-bold">LEARNING MODE:</div>
+                <select id="mode-select" class="w-full bg-black border border-[var(--border-color)] text-[var(--text-color)] rounded px-2 py-0.5 focus:outline-none text-xs font-mono" onchange="updateLearningMode()">
+                    <option value="echo" selected>1. CW ECHO (Full Text + Audio)</option>
+                    <option value="masked">2. MASKED (Listen for Hidden Words)</option>
+                    <option value="audio_gated">3. AUDIO GATED (Listen First)</option>
+                    <option value="full_key">4. FULL CW KEYING</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CRT TERMINAL SCREEN -->
+    <main class="max-w-6xl w-full mx-auto flex-1 flex flex-col mb-3">
+        <div class="crt-container rounded-lg flex-1 flex flex-col p-4 min-h-[360px] max-h-[520px]">
+            <!-- Terminal Output Scroll Window -->
+            <div id="terminal-output" class="flex-1 overflow-y-auto space-y-2.5 text-sm md:text-base leading-relaxed crt-text pr-2">
+                <!-- Dynamic Game Content -->
+            </div>
+
+            <!-- Transmission Audio Status Footer Bar -->
+            <div id="audio-status-bar" class="mt-2 pt-2 border-t border-[var(--border-color)]/60 flex flex-wrap justify-between items-center text-xs text-[var(--text-dim)] font-mono">
+                <div class="flex items-center gap-2">
+                    <span id="transmission-indicator" class="w-2 h-2 rounded-full bg-stone-600 inline-block"></span>
+                    <span id="transmission-text">STATUS: IDLE</span>
+                </div>
+                <div id="active-morse-display" class="font-bold text-[var(--text-color)] tracking-wider">
+                    <!-- Current sounding letter / dits & dahs -->
+                </div>
+                <div>
+                    <button id="skip-audio-btn" onclick="stopCWAudio()" class="hidden px-2 py-0.5 rounded bg-red-950 text-red-400 border border-red-700 hover:bg-red-900 font-bold">
+                        [ STOP CW ]
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- INPUT & CW KEYER PANEL -->
+    <footer class="max-w-6xl w-full mx-auto bg-black/50 p-3.5 rounded-lg border border-[var(--border-color)]">
+        <!-- Input Box & Command Submission -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 mb-3">
+            <div class="flex-1 relative flex items-center">
+                <span class="absolute left-3 text-[var(--text-color)] font-bold text-base">&gt;</span>
+                <input type="text" id="cmd-input" autocomplete="off" placeholder="Type command (or key CW) and press ENTER..." 
+                       oninput="onInputChanged()"
+                       class="w-full bg-black/80 border border-[var(--border-color)] text-[var(--text-color)] font-mono pl-8 pr-3 py-2 rounded focus:outline-none focus:border-[var(--text-color)] text-sm crt-text">
+            </div>
+
+            <div class="flex items-center gap-2">
+                <button id="send-btn" onclick="submitCommand()" class="px-5 py-2 rounded retro-btn font-bold text-xs flex items-center gap-1">
+                    <span>SEND</span>
+                    <span class="text-[var(--text-dim)]">[ENTER]</span>
+                </button>
+                <button onclick="clearCmdInput()" class="px-3 py-2 rounded retro-btn font-bold text-xs">
+                    [CLR CMD]
+                </button>
+            </div>
+        </div>
+
+        <!-- Spacebar / Straight Key Controls -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 items-center pt-2.5 border-t border-[var(--border-color)]/50 text-xs">
+            <!-- Keyer Mode Toggle -->
+            <div class="flex items-center gap-2">
+                <span class="font-bold text-[var(--text-dim)]">SPACEBAR KEYER:</span>
+                <button id="keyer-mode-btn" onclick="toggleKeyerMode()" class="px-2.5 py-1 rounded retro-btn font-bold">
+                    MODE: [OFF]
+                </button>
+            </div>
+
+            <!-- Straight Key Interactive Button -->
+            <div class="flex justify-center">
+                <button id="straight-key-btn" 
+                        onmousedown="startKeyTone(event)" onmouseup="stopKeyTone(event)"
+                        ontouchstart="startKeyTone(event)" ontouchend="stopKeyTone(event)"
+                        class="w-full md:w-auto px-6 py-1.5 rounded bg-black border border-[var(--border-color)] font-bold text-xs tracking-wider hover:border-[var(--text-color)] active:bg-[var(--text-color)] active:text-black select-none">
+                    [ PRESS / HOLD SPACEBAR TO KEY CW ]
+                </button>
+            </div>
+
+            <!-- Morse Buffer Display -->
+            <div class="flex items-center justify-end gap-2 font-mono">
+                <span class="text-[var(--text-dim)] font-bold">BUFFER:</span>
+                <span id="morse-buffer" class="px-2 py-0.5 bg-black border border-[var(--border-color)] rounded min-w-[70px] text-center font-bold text-[var(--text-color)]">
+                    --
+                </span>
+            </div>
+        </div>
+
+        <!-- ASCII Universal Macro Buttons (Directions included) -->
+        <div class="mt-2.5 pt-2 border-t border-[var(--border-color)]/30 flex flex-wrap justify-center gap-1.5 md:gap-2 text-xs font-mono">
+            <span class="text-[var(--text-dim)] self-center mr-1 font-bold">MACROS:</span>
+            <button onclick="quickCmd('N')" class="px-2 py-0.5 rounded retro-btn font-bold">[ N ]</button>
+            <button onclick="quickCmd('S')" class="px-2 py-0.5 rounded retro-btn font-bold">[ S ]</button>
+            <button onclick="quickCmd('E')" class="px-2 py-0.5 rounded retro-btn font-bold">[ E ]</button>
+            <button onclick="quickCmd('W')" class="px-2 py-0.5 rounded retro-btn font-bold">[ W ]</button>
+            <button onclick="quickCmd('LOOK')" class="px-2.5 py-0.5 rounded retro-btn font-bold">[LOOK]</button>
+            <button onclick="quickCmd('INVENTORY')" class="px-2.5 py-0.5 rounded retro-btn font-bold">[INV]</button>
+            <button onclick="quickCmd('MAP')" class="px-2.5 py-0.5 rounded retro-btn font-bold">[MAP]</button>
+            <button onclick="quickCmd('HELP')" class="px-2.5 py-0.5 rounded retro-btn font-bold">[HELP]</button>
+            <button onclick="clearCmdInput()" class="px-2.5 py-0.5 rounded retro-btn font-bold">[CLR CMD]</button>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT & ENGINE LOGIC -->
+    <script>
+        /* ==========================================================================
+           1. MORSE CODE DICTIONARY & CONFIGURATION
+           ========================================================================== */
+        const MORSE_CODE_MAP = {
+            'A': '.-',    'B': '-...',  'C': '-.-.',  'D': '-..',   'E': '.',
+            'F': '..-.',  'G': '--.',   'H': '....',  'I': '..',    'J': '.---',
+            'K': '-.-',   'L': '.-..',  'M': '--',    'N': '-.',    'O': '---',
+            'P': '.--.',  'Q': '--.-',  'R': '.-.',   'S': '...',   'T': '-',
+            'U': '..-',   'V': '...-',  'W': '.--',   'X': '-..-',  'Y': '-.--',
+            'Z': '--..',  '1': '.----', '2': '..---', '3': '...--', '4': '....-',
+            '5': '.....', '6': '-....', '7': '--...', '8': '---..', '9': '----.',
+            '0': '-----', '.': '.-.-.-', ',': '--..--', '?': '..--..', '/': '-..-.',
+            '=': '-...-', '-': '-....-', '!': '-.-.--', ' ': ' '
+        };
+
+        const REVERSE_MORSE_MAP = {};
+        Object.keys(MORSE_CODE_MAP).forEach(char => {
+            REVERSE_MORSE_MAP[MORSE_CODE_MAP[char]] = char;
+        });
+
+        /* Application State */
+        let isMuted = false;
+        let isHighlightEnabled = true;
+        let speedWpm = 18;
+        let farnsworthWpm = 10;
+        let toneFreq = 600;
+        let learningMode = 'echo'; // 'echo', 'masked', 'audio_gated', 'full_key'
+        let isSpacebarKeyerActive = false;
+
+        /* Audio Engine State */
+        let audioCtx = null;
+        let currentOscillator = null;
+        let currentGainNode = null;
+        let isTransmittingAudio = false;
+        let currentAudioSessionId = 0; // Incremented on cancel to invalidate running CW loops
+
+        /* Straight Key State */
+        let keyKeyDownTime = 0;
+        let keyKeyUpTime = 0;
+        let morseInputBuffer = "";
+        let keyerLetterTimeout = null;
+        let keyerWordTimeout = null;
+        let isKeyDown = false;
+
+        /* ==========================================================================
+           2. WEB AUDIO SYNTHESIZER (5ms Anti-Click Envelope)
+           ========================================================================== */
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContextClass();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function startTone() {
+            if (isMuted) return;
+            try {
+                const ctx = getAudioContext();
+                if (currentOscillator) return;
+
+                currentOscillator = ctx.createOscillator();
+                currentGainNode = ctx.createGain();
+
+                currentOscillator.type = 'sine';
+                currentOscillator.frequency.setValueAtTime(toneFreq, ctx.currentTime);
+
+                // Anti-click linear ramp envelope
+                currentGainNode.gain.setValueAtTime(0, ctx.currentTime);
+                currentGainNode.gain.linearRampToValueAtTime(0.25, ctx.currentTime + 0.005);
+
+                currentOscillator.connect(currentGainNode);
+                currentGainNode.connect(ctx.destination);
+                currentOscillator.start();
+            } catch (e) {
+                console.error("Audio synth error:", e);
+            }
+        }
+
+        function stopTone() {
+            if (currentOscillator && currentGainNode && audioCtx) {
+                try {
+                    const ctx = audioCtx;
+                    currentGainNode.gain.setValueAtTime(currentGainNode.gain.value, ctx.currentTime);
+                    currentGainNode.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.005);
+                    setTimeout(() => {
+                        if (currentOscillator) {
+                            currentOscillator.stop();
+                            currentOscillator.disconnect();
+                            currentOscillator = null;
+                            currentGainNode = null;
+                        }
+                    }, 8);
+                } catch (e) {
+                    currentOscillator = null;
+                }
+            }
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        /* Fully Stop CW Playback & Remove Active Highlights Across Screen */
+        function stopCWAudio() {
+            currentAudioSessionId++; // Invalidate active async loops
+            stopTone();
+
+            isTransmittingAudio = false;
+            updateTransmissionIndicator(false);
+
+            document.getElementById('skip-audio-btn').classList.add('hidden');
+            document.getElementById('active-morse-display').textContent = "";
+
+            // Strip all lingering active highlights from terminal text
+            removeAllActiveHighlights();
+        }
+
+        function removeAllActiveHighlights() {
+            const activeElements = document.querySelectorAll('.cw-active-char');
+            activeElements.forEach(el => {
+                const parent = el.parentNode;
+                if (parent) {
+                    parent.replaceChild(document.createTextNode(el.textContent), el);
+                    parent.normalize(); // Re-merge adjacent text nodes
+                }
+            });
+        }
+
+        function onInputChanged() {
+            // Stop CW audio as soon as the user starts typing
+            if (isTransmittingAudio) {
+                stopCWAudio();
+            }
+        }
+
+        /* ==========================================================================
+           3. TERMINAL PRINTING & CW HIGHLIGHT SYNCHRONIZATION
+           ========================================================================== */
+        async function printTerminalMessage(text, isCommandResponse = true) {
+            // Cancel any ongoing CW transmission before starting a new one
+            stopCWAudio();
+
+            const thisSessionId = currentAudioSessionId;
+            const outputDiv = document.getElementById('terminal-output');
+            
+            const msgParagraph = document.createElement('p');
+            msgParagraph.className = 'mb-2 leading-relaxed whitespace-pre-wrap';
+            outputDiv.appendChild(msgParagraph);
+
+            const skipBtn = document.getElementById('skip-audio-btn');
+
+            let textToDisplay = text;
+            if (learningMode === 'masked' && isCommandResponse) {
+                textToDisplay = maskText(text);
+            } else if (learningMode === 'audio_gated' && isCommandResponse) {
+                textToDisplay = "[ CW AUDIO TRANSMISSION IN PROGRESS... LISTEN CLOSELY ]";
+            }
+
+            // Direct display without audio if muted, background output, map output, or full keying mode
+            if (isMuted || !isCommandResponse || learningMode === 'full_key') {
+                msgParagraph.textContent = textToDisplay;
+                outputDiv.scrollTop = outputDiv.scrollHeight;
+                return;
+            }
+
+            isTransmittingAudio = true;
+            updateTransmissionIndicator(true);
+            skipBtn.classList.remove('hidden');
+
+            // CW Speed Timings
+            const ditDuration = 1200 / speedWpm;
+            const dahDuration = 3 * ditDuration;
+            const intraCharGap = ditDuration;
+
+            const farnsworthDitDuration = 1200 / farnsworthWpm;
+            const interCharGap = 3 * farnsworthDitDuration;
+            const wordGap = 7 * farnsworthDitDuration;
+
+            // Character transmission loop
+            for (let i = 0; i < text.length; i++) {
+                if (currentAudioSessionId !== thisSessionId) break;
+
+                const char = text[i];
+                const upperChar = char.toUpperCase();
+                const morseSymbol = MORSE_CODE_MAP[upperChar];
+
+                // Synchronized Character Highlighting
+                if (isHighlightEnabled) {
+                    const beforeText = textToDisplay.substring(0, i);
+                    const activeCharSpan = `<span class="cw-active-char">${escapeHtml(char)}</span>`;
+                    const afterText = textToDisplay.substring(i + 1);
+                    msgParagraph.innerHTML = escapeHtml(beforeText) + activeCharSpan + escapeHtml(afterText);
+                } else {
+                    msgParagraph.textContent = textToDisplay.substring(0, i + 1);
+                }
+
+                document.getElementById('active-morse-display').textContent = morseSymbol ? `${upperChar}: ${morseSymbol}` : upperChar;
+                outputDiv.scrollTop = outputDiv.scrollHeight;
+
+                // Sound Morse Code
+                if (morseSymbol && morseSymbol !== ' ') {
+                    for (let j = 0; j < morseSymbol.length; j++) {
+                        if (currentAudioSessionId !== thisSessionId) break;
+
+                        const elem = morseSymbol[j];
+                        startTone();
+                        const duration = (elem === '.') ? ditDuration : dahDuration;
+                        await sleep(duration);
+                        stopTone();
+
+                        await sleep(intraCharGap);
+                    }
+                    await sleep(interCharGap);
+                } else if (char === ' ') {
+                    await sleep(wordGap);
+                } else {
+                    await sleep(ditDuration * 2);
+                }
+            }
+
+            // Clean up session state on completion
+            if (currentAudioSessionId === thisSessionId) {
+                msgParagraph.textContent = textToDisplay;
+                outputDiv.scrollTop = outputDiv.scrollHeight;
+
+                isTransmittingAudio = false;
+                updateTransmissionIndicator(false);
+                skipBtn.classList.add('hidden');
+                document.getElementById('active-morse-display').textContent = "";
+            }
+        }
+
+        function maskText(str) {
+            return str.replace(/[A-Z]/g, (c, idx) => (idx % 3 === 0 ? '*' : c));
+        }
+
+        function updateTransmissionIndicator(active) {
+            const indicator = document.getElementById('transmission-indicator');
+            const statusText = document.getElementById('transmission-text');
+            if (active) {
+                indicator.className = "w-2 h-2 rounded-full bg-[var(--text-color)] animate-ping inline-block";
+                statusText.textContent = "STATUS: TRANSMITTING CW";
+                statusText.classList.add('text-[var(--text-color)]');
+            } else {
+                indicator.className = "w-2 h-2 rounded-full bg-stone-600 inline-block";
+                statusText.textContent = "STATUS: IDLE";
+                statusText.classList.remove('text-[var(--text-color)]');
+            }
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        /* ==========================================================================
+           4. MORSE KEYER & SPACEBAR INPUT ENGINE
+           ========================================================================== */
+        function toggleKeyerMode() {
+            isSpacebarKeyerActive = !isSpacebarKeyerActive;
+            const btn = document.getElementById('keyer-mode-btn');
+            if (isSpacebarKeyerActive) {
+                btn.textContent = "MODE: [ON]";
+                btn.classList.add('retro-btn-active');
+            } else {
+                btn.textContent = "MODE: [OFF]";
+                btn.classList.remove('retro-btn-active');
+            }
+        }
+
+        function startKeyTone(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            if (isKeyDown) return;
+
+            stopCWAudio(); // Interrupt any playing text CW
+            
+            isKeyDown = true;
+            keyKeyDownTime = Date.now();
+            
+            clearTimeout(keyerLetterTimeout);
+            clearTimeout(keyerWordTimeout);
+
+            document.getElementById('straight-key-btn').classList.add('key-active');
+            startTone();
+        }
+
+        function stopKeyTone(e) {
+            if (e && e.preventDefault) e.preventDefault();
+            if (!isKeyDown) return;
+
+            isKeyDown = false;
+            keyKeyUpTime = Date.now();
+            document.getElementById('straight-key-btn').classList.remove('key-active');
+            stopTone();
+
+            const duration = keyKeyUpTime - keyKeyDownTime;
+            const ditThreshold = 1200 / speedWpm;
+
+            if (duration < ditThreshold * 1.75) {
+                morseInputBuffer += ".";
+            } else {
+                morseInputBuffer += "-";
+            }
+
+            document.getElementById('morse-buffer').textContent = morseInputBuffer;
+            keyerLetterTimeout = setTimeout(processKeyerLetter, ditThreshold * 3);
+        }
+
+        function processKeyerLetter() {
+            if (!morseInputBuffer) return;
+
+            const decodedChar = REVERSE_MORSE_MAP[morseInputBuffer] || '?';
+            const inputEl = document.getElementById('cmd-input');
+            
+            inputEl.value += decodedChar;
+            morseInputBuffer = "";
+            document.getElementById('morse-buffer').textContent = "--";
+
+            const ditThreshold = 1200 / speedWpm;
+            keyerWordTimeout = setTimeout(() => {
+                if (!inputEl.value.endsWith(' ')) {
+                    inputEl.value += ' ';
+                }
+            }, ditThreshold * 6);
+        }
+
+        /* Keyboard Handlers */
+        document.addEventListener('keydown', function(e) {
+            const inputEl = document.getElementById('cmd-input');
+            const isInputFocused = (document.activeElement === inputEl);
+
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                submitCommand();
+                return;
+            }
+
+            if (e.code === 'Space') {
+                if (isSpacebarKeyerActive || !isInputFocused) {
+                    e.preventDefault();
+                    startKeyTone(e);
+                }
+            }
+        });
+
+        document.addEventListener('keyup', function(e) {
+            if (e.code === 'Space') {
+                if (isKeyDown) {
+                    e.preventDefault();
+                    stopKeyTone(e);
+                }
+            }
+        });
+
+        /* ==========================================================================
+           5. COLOSSAL CAVE GAME ENGINE & ASCII MAP GENERATOR
+           ========================================================================== */
+        const GAME_ROOMS = {
+            'end_of_road': {
+                name: "End of Road",
+                description: "You are standing at the end of a dirt road before a small brick building. Around you is a forest. A small stream flows out of the building and down a gully. High above, a vintage radio antenna looms against the sky.",
+                exits: { 'IN': 'building', 'EAST': 'building', 'E': 'building', 'WEST': 'gully', 'W': 'gully', 'DOWN': 'gully', 'D': 'gully', 'NORTH': 'forest', 'N': 'forest', 'SOUTH': 'forest', 'S': 'forest' },
+                items: []
+            },
+            'building': {
+                name: "Inside Brick Building",
+                description: "You are inside a small brick building, a well house for a subterranean spring. On a heavy workbench sits a brass CW Morse key, brass key, lantern, food, water, and a humming tube radio transmitter.",
+                exits: { 'OUT': 'end_of_road', 'WEST': 'end_of_road', 'W': 'end_of_road' },
+                items: ['KEY', 'LANTERN', 'FOOD', 'WATER', 'BOTTLE']
+            },
+            'gully': {
+                name: "Stream Gully",
+                description: "You are in a steep gully beside a stream flowing down from the brick building.",
+                exits: { 'UP': 'end_of_road', 'U': 'end_of_road', 'EAST': 'end_of_road', 'E': 'end_of_road', 'DOWN': 'slit', 'D': 'slit', 'SOUTH': 'slit', 'S': 'slit' },
+                items: []
+            },
+            'slit': {
+                name: "At Slit in Rock",
+                description: "At your feet, the stream flows into a 20-inch wide slit in the solid rock face.",
+                exits: { 'UP': 'gully', 'U': 'gully', 'NORTH': 'gully', 'N': 'gully', 'DOWN': 'grate', 'D': 'grate', 'IN': 'grate' },
+                items: []
+            },
+            'grate': {
+                name: "Outside Iron Grate",
+                description: "You are standing outside a heavy iron grate set into stone, guarding the entrance to Colossal Cave.",
+                exits: { 'UP': 'slit', 'U': 'slit', 'OUT': 'slit', 'DOWN': 'below_grate', 'D': 'below_grate', 'IN': 'below_grate' },
+                items: [],
+                locked: true
+            },
+            'below_grate': {
+                name: "Below the Iron Grate",
+                description: "You are in a cool stone chamber beneath the iron grate. Cool air whistles past like distant Morse code.",
+                exits: { 'UP': 'grate', 'U': 'grate', 'OUT': 'grate', 'WEST': 'cobble_crawl', 'W': 'cobble_crawl' },
+                items: ['ROD']
+            },
+            'cobble_crawl': {
+                name: "Cobble Crawl",
+                description: "You are crawling through a narrow cobblestone passage. Ancient carved symbols spell out: 'CW CW CW'.",
+                exits: { 'EAST': 'below_grate', 'E': 'below_grate', 'WEST': 'debris_room', 'W': 'debris_room' },
+                items: []
+            },
+            'debris_room': {
+                name: "Debris Room",
+                description: "You are in a debris room filled with dusty radio vacuum tubes, coils, and crystal oscillators.",
+                exits: { 'EAST': 'cobble_crawl', 'E': 'cobble_crawl', 'WEST': 'hall_mists', 'W': 'hall_mists' },
+                items: ['BIRD']
+            },
+            'hall_mists': {
+                name: "Hall of Mists",
+                description: "You are in a vast chamber filled with swirling white mist. Passages lead off in all directions.",
+                exits: { 'EAST': 'debris_room', 'E': 'debris_room', 'WEST': 'canyon', 'W': 'canyon' },
+                items: ['GOLD_NUGGET', 'COINS']
+            },
+            'canyon': {
+                name: "Awful Canyon",
+                description: "You are on the brink of an awful canyon plunging into pitch darkness. Echoes whisper in dits and dahs.",
+                exits: { 'EAST': 'hall_mists', 'E': 'hall_mists' },
+                items: []
+            },
+            'forest': {
+                name: "Deep Forest",
+                description: "You are wandering among tall trees. The forest stretches endlessly in all directions.",
+                exits: { 'SOUTH': 'end_of_road', 'S': 'end_of_road', 'NORTH': 'forest', 'N': 'forest' },
+                items: []
+            }
+        };
+
+        let currentRoom = 'end_of_road';
+        let playerInventory = [];
+
+        function initGame() {
+            printTerminalMessage("COLOSSAL CW ADVENTURE v2.7 - RETRO MORSE CODE ENGINE", false);
+            printTerminalMessage("Type commands (LOOK, INVENTORY, N, S, E, W, TAKE KEY, MAP, HELP) or use the Morse Key to transmit!", false);
+            printTerminalMessage("----------------------------------------------------------------------------------", false);
+            lookRoom();
+        }
+
+        function lookRoom() {
+            const room = GAME_ROOMS[currentRoom];
+            let desc = `[ ${room.name.toUpperCase()} ]\n${room.description}`;
+            
+            if (room.items.length > 0) {
+                desc += `\nYou see here: ${room.items.join(', ')}.`;
+            }
+
+            // Excludes redundant one-letter duplicate exits from text display
+            const displayedExits = Array.from(new Set(Object.keys(room.exits).map(e => e.length === 1 ? e : e))).filter(e => e.length > 1).join(', ');
+            desc += `\nExits: ${displayedExits}`;
+
+            printTerminalMessage(desc);
+        }
+
+        function renderAsciiMap() {
+            // Instantly stop all CW audio when rendering the map
+            stopCWAudio();
+
+            const mapAscii = 
+`==================================================
+              COLOSSAL CAVE ASCII MAP             
+==================================================
+
+ [FOREST]
+    | (N/S)
+ [END OF ROAD] ===== [INSIDE BUILDING]
+    | (W/E)
+ [STREAM GULLY]
+    | (D/U)
+ [SLIT IN ROCK]
+    | (D/U)
+ [IRON GRATE]
+    | (D/U)
+ [BELOW GRATE] ----- [COBBLE CRAWL]
+                           | (W/E)
+                     [DEBRIS ROOM]
+                           | (W/E)
+                    [HALL OF MISTS]
+                           | (W/E)
+                    [AWFUL CANYON]
+
+==================================================`;
+            // Second parameter 'false' ensures map prints directly without CW audio or letter highlights
+            printTerminalMessage(mapAscii, false);
+        }
+
+        function submitCommand() {
+            // Immediately stop CW audio on new command submission
+            stopCWAudio();
+
+            const inputEl = document.getElementById('cmd-input');
+            const rawCmd = inputEl.value.trim();
+            inputEl.value = "";
+
+            if (!rawCmd) return;
+
+            // Output user prompt
+            const outputDiv = document.getElementById('terminal-output');
+            const cmdEcho = document.createElement('p');
+            cmdEcho.className = "text-[var(--text-color)] font-bold mt-2";
+            cmdEcho.textContent = `> ${rawCmd}`;
+            outputDiv.appendChild(cmdEcho);
+
+            parseCommand(rawCmd.toUpperCase());
+        }
+
+        function quickCmd(cmdText) {
+            document.getElementById('cmd-input').value = cmdText;
+            submitCommand();
+        }
+
+        function clearCmdInput() {
+            // Strictly clears command input field ONLY
+            document.getElementById('cmd-input').value = "";
+            document.getElementById('cmd-input').focus();
+        }
+
+        function parseCommand(cmd) {
+            const tokens = cmd.split(' ').filter(t => t.length > 0);
+            if (tokens.length === 0) return;
+
+            const verb = tokens[0];
+            const noun = tokens[1] || "";
+
+            // Directional Movement
+            if (['NORTH', 'N'].includes(verb)) return moveRoom('NORTH');
+            if (['SOUTH', 'S'].includes(verb)) return moveRoom('SOUTH');
+            if (['EAST', 'E'].includes(verb)) return moveRoom('EAST');
+            if (['WEST', 'W'].includes(verb)) return moveRoom('WEST');
+            if (['UP', 'U'].includes(verb)) return moveRoom('UP');
+            if (['DOWN', 'D'].includes(verb)) return moveRoom('DOWN');
+            if (['IN', 'ENTER'].includes(verb)) return moveRoom('IN');
+            if (['OUT', 'EXIT'].includes(verb)) return moveRoom('OUT');
+
+            switch (verb) {
+                case 'LOOK':
+                case 'L':
+                    lookRoom();
+                    break;
+
+                case 'INVENTORY':
+                case 'INV':
+                case 'I':
+                    if (playerInventory.length === 0) {
+                        printTerminalMessage("You are carrying nothing.");
+                    } else {
+                        printTerminalMessage(`You are carrying: ${playerInventory.join(', ')}.`);
+                    }
+                    break;
+
+                case 'MAP':
+                    renderAsciiMap();
+                    break;
+
+                case 'TAKE':
+                case 'GET':
+                    takeItem(noun);
+                    break;
+
+                case 'DROP':
+                    dropItem(noun);
+                    break;
+
+                case 'UNLOCK':
+                    if (currentRoom === 'grate') {
+                        if (playerInventory.includes('KEY')) {
+                            GAME_ROOMS['grate'].locked = false;
+                            printTerminalMessage("You turn the key in the heavy iron lock. The grate unlocks with a loud metal click!");
+                        } else {
+                            printTerminalMessage("You need a key to unlock the iron grate.");
+                        }
+                    } else {
+                        printTerminalMessage("There is nothing here to unlock.");
+                    }
+                    break;
+
+                case 'HELP':
+                    printTerminalMessage("COMMANDS: LOOK, INVENTORY, MAP, N, S, E, W, UP, DOWN, IN, OUT, TAKE <item>, DROP <item>, UNLOCK, HELP.");
+                    break;
+
+                default:
+                    printTerminalMessage(`Unknown command "${verb}". Type HELP for a list of valid actions.`);
+                    break;
+            }
+        }
+
+        function moveRoom(direction) {
+            const room = GAME_ROOMS[currentRoom];
+
+            if (currentRoom === 'grate' && (direction === 'DOWN' || direction === 'IN' || direction === 'D') && GAME_ROOMS['grate'].locked) {
+                printTerminalMessage("The iron grate is locked. You cannot enter Colossal Cave without unlocking it.");
+                return;
+            }
+
+            if (room.exits[direction]) {
+                currentRoom = room.exits[direction];
+                lookRoom();
+            } else {
+                printTerminalMessage(`You cannot go ${direction} from here.`);
+            }
+        }
+
+        function takeItem(itemName) {
+            if (!itemName) {
+                printTerminalMessage("What do you want to take?");
+                return;
+            }
+            const room = GAME_ROOMS[currentRoom];
+            const itemIdx = room.items.findIndex(i => i === itemName);
+
+            if (itemIdx !== -1) {
+                const item = room.items.splice(itemIdx, 1)[0];
+                playerInventory.push(item);
+                printTerminalMessage(`Taken: ${item}`);
+            } else {
+                printTerminalMessage(`You don't see "${itemName}" here.`);
+            }
+        }
+
+        function dropItem(itemName) {
+            if (!itemName) {
+                printTerminalMessage("What do you want to drop?");
+                return;
+            }
+            const itemIdx = playerInventory.findIndex(i => i === itemName);
+
+            if (itemIdx !== -1) {
+                const item = playerInventory.splice(itemIdx, 1)[0];
+                GAME_ROOMS[currentRoom].items.push(item);
+                printTerminalMessage(`Dropped: ${item}`);
+            } else {
+                printTerminalMessage(`You are not carrying "${itemName}".`);
+            }
+        }
+
+        /* ==========================================================================
+           6. CONTROLS & SETTINGS
+           ========================================================================== */
+        function setTheme(themeClass) {
+            document.body.className = `${themeClass} min-h-screen flex flex-col justify-between p-2 md:p-5 transition-colors duration-300 select-none`;
+        }
+
+        function toggleHighlighting() {
+            isHighlightEnabled = !isHighlightEnabled;
+            const btn = document.getElementById('highlight-btn');
+            if (isHighlightEnabled) {
+                btn.textContent = "HIGHLIGHT: [ON]";
+                btn.classList.add('retro-btn-active');
+            } else {
+                btn.textContent = "HIGHLIGHT: [OFF]";
+                btn.classList.remove('retro-btn-active');
+            }
+        }
+
+        function toggleMute() {
+            isMuted = !isMuted;
+            const btn = document.getElementById('mute-btn');
+            if (isMuted) {
+                btn.textContent = "AUDIO: [OFF]";
+                btn.classList.remove('retro-btn-active');
+                stopCWAudio();
+            } else {
+                btn.textContent = "AUDIO: [ON]";
+                btn.classList.add('retro-btn-active');
+            }
+        }
+
+        function updateSpeedSettings() {
+            speedWpm = parseInt(document.getElementById('wpm-slider').value, 10);
+            farnsworthWpm = parseInt(document.getElementById('farnsworth-slider').value, 10);
+
+            if (farnsworthWpm > speedWpm) {
+                farnsworthWpm = speedWpm;
+                document.getElementById('farnsworth-slider').value = farnsworthWpm;
+            }
+
+            document.getElementById('wpm-val').textContent = `${speedWpm} WPM`;
+            document.getElementById('farnsworth-val').textContent = `${farnsworthWpm} WPM`;
+        }
+
+        function updateAudioSettings() {
+            toneFreq = parseInt(document.getElementById('freq-slider').value, 10);
+            document.getElementById('freq-val').textContent = `${toneFreq} Hz`;
+        }
+
+        function updateLearningMode() {
+            learningMode = document.getElementById('mode-select').value;
+        }
+
+        window.onload = function() {
+            initGame();
+        };
+    </script>
+</body>
+</html>
